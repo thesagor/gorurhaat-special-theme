@@ -1,0 +1,745 @@
+/* 
+Theme Name: Hello Elementor Child
+Theme URI: https://github.com/elementor/hello-theme-child/
+Description: Hello Elementor Child is a child theme of Hello Elementor, created by Elementor team
+Author: Elementor Team
+Author URI: https://elementor.com/
+Template: hello-elementor
+Version: 2.0.0
+Text Domain: hello-elementor-child
+License: GNU General Public License v3 or later.
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, featured-images, rtl-language-support, threaded-comments, translation-ready
+*/
+
+/* Add your custom styles here */
+
+/* ==========================================================================
+   WhatsApp Button Styles
+   ========================================================================== */
+
+.whatsapp-button-container {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.whatsapp-button {
+    display: inline-flex;
+    align-items: center;
+    background-color: #25D366;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.whatsapp-button:hover {
+    background-color: #128C7E !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(37, 211, 102, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.whatsapp-button svg {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+}
+
+@media (max-width: 768px) {
+    .whatsapp-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   WooCommerce Custom Styles
+   ========================================================================== */
+
+/* Custom Checkout Styles */
+.custom-checkout-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.checkout-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f1f1;
+}
+
+.checkout-header h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+}
+
+.checkout-subtitle {
+    color: #666;
+    font-size: 1.1em;
+    margin: 0;
+}
+
+/* Custom Cart Styles */
+.custom-cart-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cart-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f1f1;
+}
+
+.cart-header h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+}
+
+.cart-subtitle {
+    color: #666;
+    font-size: 1.1em;
+    margin: 0;
+}
+
+.cart-actions-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.cart-actions-wrapper .coupon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Custom Product Page Styles */
+.custom-single-product {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.product-layout-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.product-details-section {
+    padding: 20px;
+}
+
+.product-header h1 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 2.2em;
+    line-height: 1.3;
+}
+
+/* Custom Fields Styles */
+.custom-product-fields {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.custom-product-fields h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    border-bottom: 2px solid #007cba;
+    padding-bottom: 8px;
+}
+
+.custom-product-fields p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.custom-product-fields strong {
+    color: #555;
+    font-weight: 600;
+}
+
+/* WooCommerce Form Enhancements */
+.woocommerce-billing-fields h3,
+.woocommerce-shipping-fields h3,
+#order_review_heading {
+    background: #007cba;
+    color: white;
+    padding: 15px 20px;
+    margin: 0 0 20px 0;
+    border-radius: 5px;
+    font-size: 1.2em;
+}
+
+.woocommerce-billing-fields__field-wrapper,
+.woocommerce-shipping-fields__field-wrapper {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* Custom Checkout Fields */
+.form-row input[type="text"],
+.form-row input[type="email"],
+.form-row input[type="tel"],
+.form-row textarea,
+.form-row select {
+    border: 2px solid #e9ecef;
+    border-radius: 5px;
+    padding: 12px 15px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-row input[type="text"]:focus,
+.form-row input[type="email"]:focus,
+.form-row input[type="tel"]:focus,
+.form-row textarea:focus,
+.form-row select:focus {
+    border-color: #007cba;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
+}
+
+/* Buttons */
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce #respond input#submit {
+    background: #007cba;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.woocommerce button.button:hover,
+.woocommerce input.button:hover,
+.woocommerce #respond input#submit:hover {
+    background: #005a8b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 124, 186, 0.3);
+}
+
+/* Cart Table Improvements */
+.woocommerce-cart-table {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.woocommerce-cart-table th {
+    background: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.woocommerce-cart-table td {
+    padding: 20px 15px;
+    border-bottom: 1px solid #f1f1f1;
+    vertical-align: middle;
+}
+
+/* Product Images */
+.woocommerce-product-gallery {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .product-layout-wrapper {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .cart-actions-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cart-actions-wrapper .coupon {
+        justify-content: center;
+    }
+
+    .checkout-header h2,
+    .cart-header h2 {
+        font-size: 2em;
+    }
+
+    .custom-checkout-wrapper,
+    .custom-cart-wrapper,
+    .custom-single-product {
+        padding: 15px;
+    }
+}
+
+/* Admin Product Fields Styling */
+#woocommerce-product-data .panel-wrap {
+    background: #f9f9f9;
+}
+
+#woocommerce-product-data .form-field input,
+#woocommerce-product-data .form-field textarea,
+#woocommerce-product-data .form-field select {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 8px 12px;
+}
+
+#woocommerce-product-data .form-field label {
+    font-weight: 600;
+    color: #555;
+}
+
+/* Cow Info Section Styling */
+.cow-info-section {
+    background: #f8f9fa;
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    padding: 25px;
+    margin: 25px 0;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.1);
+}
+
+.cow-info-section h3 {
+    color: #28a745;
+    margin-bottom: 20px;
+    font-size: 1.4em;
+    border-bottom: 3px solid #28a745;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.cow-info-section h3::before {
+    content: "🐄";
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.cow-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.cow-info-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cow-info-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cow-info-item strong {
+    color: #28a745;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 100px;
+}
+
+.cow-info-item.cow-notes {
+    grid-column: 1 / -1;
+}
+
+.cow-info-item.cow-notes strong {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.vaccinated-status {
+    background: #28a745;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Cow Info Admin Tab Styling */
+#cow_info_product_data .options_group {
+    border: none;
+    margin: 0;
+    padding: 20px;
+}
+
+#cow_info_product_data .form-field {
+    margin-bottom: 20px;
+}
+
+#cow_info_product_data .form-field label {
+    color: #28a745;
+    font-weight: 600;
+}
+
+#cow_info_product_data .form-field input,
+#cow_info_product_data .form-field textarea,
+#cow_info_product_data .form-field select {
+    border: 2px solid #e9ecef;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+#cow_info_product_data .form-field input:focus,
+#cow_info_product_data .form-field textarea:focus,
+#cow_info_product_data .form-field select:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+/* Mobile Responsive for Cow Info */
+@media (max-width: 768px) {
+    .cow-info-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .cow-info-section {
+        padding: 20px 15px;
+        margin: 20px 0;
+    }
+
+    .cow-info-section h3 {
+        font-size: 1.2em;
+    }
+
+    .cow-info-item {
+        padding: 12px;
+    }
+
+    .cow-info-item strong {
+        display: block;
+        margin-bottom: 5px;
+        min-width: auto;
+    }
+}
+
+/* Cow Info Excerpt Styling (replaces short description) */
+.cow-info-excerpt {
+    margin: 15px 0 25px 0;
+    padding: 0;
+}
+
+.cow-summary-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.cow-summary-text strong {
+    color: #28a745;
+    font-weight: 600;
+}
+
+/* Product Brand Styling */
+.posted_in {
+    display: block;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.posted_in a {
+    color: #28a745;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.posted_in a:hover {
+    color: #1e7e34;
+    text-decoration: underline;
+}
+
+/* Admin Brands Taxonomy Styling */
+.taxonomy-product_brand .term-name-wrap {
+    background: #f8f9fa;
+    border-left: 3px solid #28a745;
+    padding: 5px 10px;
+    margin: 2px 0;
+}
+
+/* Mobile Responsive for Cow Excerpt */
+@media (max-width: 768px) {
+    .cow-summary-text {
+        font-size: 14px;
+        padding: 15px;
+    }
+
+    .cow-info-excerpt {
+        margin: 10px 0 20px 0;
+    }
+}
+
+/* Cow Info Fields Display (replaces summary text) */
+.cow-info-fields-display,
+.product-info-fields-display {
+    margin: 15px 0 25px 0;
+    padding: 0;
+}
+
+.cow-fields-grid,
+.product-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.cow-field-item,
+.product-field-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e9ecef;
+    background: white;
+    padding: 12px 15px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cow-field-item:hover,
+.product-field-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cow-field-item:last-child,
+.product-field-item:last-child {
+    border-bottom: none;
+}
+
+.field-label {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 80px;
+}
+
+.field-value {
+    color: #28a745;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: right;
+}
+
+.field-value.pregnant-status,
+.field-value.vaccinated-status {
+    background: #28a745;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Product Type Specific Styling */
+/* Livestock products - Green theme */
+.product-info-fields-display .product-fields-grid[data-type="livestock"] {
+    border-left: 4px solid #28a745;
+}
+
+.product-info-fields-display .product-fields-grid[data-type="livestock"] .field-value {
+    color: #28a745;
+}
+
+/* Dairy products - Blue theme */
+.product-info-fields-display .product-fields-grid[data-type="dairy"] {
+    border-left: 4px solid #007bff;
+}
+
+.product-info-fields-display .product-fields-grid[data-type="dairy"] .field-value {
+    color: #007bff;
+}
+
+/* Animal feed - Orange theme */
+.product-info-fields-display .product-fields-grid[data-type="feed"] {
+    border-left: 4px solid #fd7e14;
+}
+
+.product-info-fields-display .product-fields-grid[data-type="feed"] .field-value {
+    color: #fd7e14;
+}
+
+/* Special field styling */
+.product-field-item.nutrition-info {
+    grid-column: 1 / -1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.product-field-item.nutrition-info .field-value {
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.product-field-item.product-notes {
+    grid-column: 1 / -1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.product-field-item.product-notes .field-value {
+    text-align: left;
+    font-style: italic;
+    color: #666;
+}
+
+/* Admin Product Info Tab Styling */
+#product_info_product_data .options_group {
+    border: none;
+    margin: 0;
+    padding: 20px;
+}
+
+#product_info_product_data .form-field {
+    margin-bottom: 20px;
+}
+
+#product_info_product_data .form-field label {
+    color: #333;
+    font-weight: 600;
+}
+
+#product_info_product_data .livestock-fields .form-field label {
+    color: #28a745;
+}
+
+#product_info_product_data .dairy-product-fields .form-field label {
+    color: #007bff;
+}
+
+#product_info_product_data .feed-fields .form-field label {
+    color: #fd7e14;
+}
+
+#product_info_product_data .form-field input,
+#product_info_product_data .form-field textarea,
+#product_info_product_data .form-field select {
+    border: 2px solid #e9ecef;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+#product_info_product_data .livestock-fields .form-field input:focus,
+#product_info_product_data .livestock-fields .form-field textarea:focus,
+#product_info_product_data .livestock-fields .form-field select:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+#product_info_product_data .dairy-product-fields .form-field input:focus,
+#product_info_product_data .dairy-product-fields .form-field textarea:focus,
+#product_info_product_data .dairy-product-fields .form-field select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+#product_info_product_data .feed-fields .form-field input:focus,
+#product_info_product_data .feed-fields .form-field textarea:focus,
+#product_info_product_data .feed-fields .form-field select:focus {
+    border-color: #fd7e14;
+    box-shadow: 0 0 0 3px rgba(253, 126, 20, 0.1);
+}
+
+/* Mobile Responsive for Product Fields */
+@media (max-width: 768px) {
+    .cow-fields-grid,
+    .product-fields-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 15px;
+    }
+
+    .cow-field-item,
+    .product-field-item {
+        padding: 10px 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .field-label {
+        font-size: 12px;
+        min-width: auto;
+    }
+
+    .field-value {
+        font-size: 13px;
+        text-align: left;
+    }
+
+    .cow-info-fields-display,
+    .product-info-fields-display {
+        margin: 10px 0 20px 0;
+    }
+}
+
+/* Hide category and brand metaboxes */
+#product_catdiv,
+#product_branddiv {
+    display: none !important;
+}
