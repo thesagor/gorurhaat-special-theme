@@ -299,7 +299,7 @@ function hello_elementor_child_product_info_tab_content() {
 
     echo '</div>';
 
-    // DAIRY PRODUCT SECTION
+    // DAIRY PRODUCT SECTION is now
     echo '<div class="options_group dairy-product-fields" style="display:none;">';
     echo '<h4>' . __('Dairy Product Information', 'hello-elementor-child') . '</h4>';
 
