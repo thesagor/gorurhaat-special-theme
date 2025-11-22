@@ -98,8 +98,16 @@ add_action( 'init', 'hello_elementor_child_create_product_taxonomies' );
 
 /**
  * Create default taxonomy terms
+ * Only runs once to avoid unnecessary database queries
  */
 function hello_elementor_child_create_default_taxonomy_terms() {
+    // Check if we've already created the terms
+    $terms_created = get_option( 'hello_elementor_child_taxonomy_terms_created', false );
+    
+    if ( $terms_created ) {
+        return;
+    }
+
     // Create main product type categories
     $product_types = array(
         'livestock' => array(
@@ -116,8 +124,8 @@ function hello_elementor_child_create_default_taxonomy_terms() {
         )
     );
 
-    foreach( $product_types as $slug => $data ) {
-        if( !term_exists( $data['name'], 'product_type_category' ) ) {
+    foreach ( $product_types as $slug => $data ) {
+        if ( ! term_exists( $data['name'], 'product_type_category' ) ) {
             wp_insert_term(
                 $data['name'],
                 'product_type_category',
@@ -158,8 +166,8 @@ function hello_elementor_child_create_default_taxonomy_terms() {
 
     $all_brands = array_merge( $livestock_brands, $dairy_brands, $feed_brands );
 
-    foreach( $all_brands as $slug => $name ) {
-        if( !term_exists( $name, 'product_brand' ) ) {
+    foreach ( $all_brands as $slug => $name ) {
+        if ( ! term_exists( $name, 'product_brand' ) ) {
             wp_insert_term(
                 $name,
                 'product_brand',
@@ -169,6 +177,9 @@ function hello_elementor_child_create_default_taxonomy_terms() {
             );
         }
     }
+
+    // Mark that we've created the terms
+    update_option( 'hello_elementor_child_taxonomy_terms_created', true );
 }
 add_action( 'init', 'hello_elementor_child_create_default_taxonomy_terms' );
 
@@ -545,125 +556,109 @@ add_action( 'woocommerce_product_data_panels', 'hello_elementor_child_product_in
 
 /**
  * Save Product Info tab fields
+ * 
+ * @param int $post_id The product post ID
  */
 function hello_elementor_child_save_product_info_fields( $post_id ) {
-    // Product Type
-    $product_info_type = $_POST['_product_info_type'];
-    if( !empty( $product_info_type ) ) {
-        update_post_meta( $post_id, '_product_info_type', esc_attr( $product_info_type ) );
+    // Security checks
+    if ( ! current_user_can( 'edit_product', $post_id ) ) {
+        return;
     }
 
-    // Cow Type
-    $cow_type = $_POST['_cow_type'];
-    if( !empty( $cow_type ) ) {
-        update_post_meta( $post_id, '_cow_type', esc_attr( $cow_type ) );
+    // Verify nonce if available (WooCommerce handles this, but good practice)
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
     }
 
-    // Cow Breed
-    $cow_breed = $_POST['_cow_breed'];
-    if( !empty( $cow_breed ) ) {
-        update_post_meta( $post_id, '_cow_breed', esc_attr( $cow_breed ) );
+    // Define all fields with their sanitization callbacks
+    $fields = array(
+        // Product Type
+        '_product_info_type' => array(
+            'sanitize' => 'sanitize_text_field',
+            'validate' => array( '', 'livestock', 'dairy_product', 'feed' )
+        ),
+        
+        // Livestock fields
+        '_cow_type' => array(
+            'sanitize' => 'sanitize_text_field',
+            'validate' => array( '', 'ox', 'dairy_cow', 'bokna' )
+        ),
+        '_cow_breed' => 'sanitize_text_field',
+        '_cow_age' => 'sanitize_text_field',
+        '_cow_weight' => 'absint',
+        '_cow_color' => array(
+            'sanitize' => 'sanitize_text_field',
+            'validate' => array( '', 'black', 'brown', 'white', 'black_white', 'brown_white', 'mixed' )
+        ),
+        '_cow_health_status' => array(
+            'sanitize' => 'sanitize_text_field',
+            'validate' => array( '', 'excellent', 'good', 'fair', 'needs_attention' )
+        ),
+        
+        // Dairy product fields
+        '_dairy_product_type' => array(
+            'sanitize' => 'sanitize_text_field',
+            'validate' => array( '', 'milk', 'butter', 'cheese', 'yogurt', 'cream', 'ghee' )
+        ),
+        '_dairy_fat_content' => 'sanitize_text_field',
+        '_dairy_unit_size' => 'sanitize_text_field',
+        '_dairy_shelf_life' => 'sanitize_text_field',
+        '_dairy_storage' => array(
+            'sanitize' => 'sanitize_text_field',
+            'validate' => array( '', 'refrigerated', 'frozen', 'room_temperature', 'cool_dry_place' )
+        ),
+        '_dairy_origin' => 'sanitize_text_field',
+        
+        // Feed fields
+        '_feed_type' => array(
+            'sanitize' => 'sanitize_text_field',
+            'validate' => array( '', 'cattle_feed', 'dairy_feed', 'calf_feed', 'hay', 'silage', 'concentrate' )
+        ),
+        '_feed_package_size' => 'sanitize_text_field',
+        '_feed_protein_content' => 'sanitize_text_field',
+        '_feed_suitable_for' => array(
+            'sanitize' => 'sanitize_text_field',
+            'validate' => array( '', 'all_cattle', 'dairy_cows', 'beef_cattle', 'calves', 'oxen' )
+        ),
+        '_feed_nutrition_info' => 'sanitize_textarea_field',
+        
+        // Common fields
+        '_product_notes' => 'sanitize_textarea_field',
+    );
+
+    // Process each field
+    foreach ( $fields as $field_key => $sanitize_config ) {
+        if ( ! isset( $_POST[ $field_key ] ) ) {
+            continue;
+        }
+
+        $value = $_POST[ $field_key ];
+        
+        // Handle array configuration (with validation)
+        if ( is_array( $sanitize_config ) ) {
+            $sanitize_callback = $sanitize_config['sanitize'];
+            $sanitized_value = call_user_func( $sanitize_callback, $value );
+            
+            // Validate against allowed values if specified
+            if ( isset( $sanitize_config['validate'] ) && ! in_array( $sanitized_value, $sanitize_config['validate'], true ) ) {
+                continue; // Skip invalid values
+            }
+        } else {
+            // Simple sanitization callback
+            $sanitized_value = call_user_func( $sanitize_config, $value );
+        }
+
+        // Only update if value is not empty
+        if ( ! empty( $sanitized_value ) || $sanitized_value === '0' ) {
+            update_post_meta( $post_id, $field_key, $sanitized_value );
+        } else {
+            delete_post_meta( $post_id, $field_key );
+        }
     }
 
-    // Cow Age
-    $cow_age = $_POST['_cow_age'];
-    if( !empty( $cow_age ) ) {
-        update_post_meta( $post_id, '_cow_age', esc_attr( $cow_age ) );
-    }
-
-    // Cow Weight
-    $cow_weight = $_POST['_cow_weight'];
-    if( !empty( $cow_weight ) ) {
-        update_post_meta( $post_id, '_cow_weight', esc_attr( $cow_weight ) );
-    }
-
-    // Cow Color
-    $cow_color = $_POST['_cow_color'];
-    if( !empty( $cow_color ) ) {
-        update_post_meta( $post_id, '_cow_color', esc_attr( $cow_color ) );
-    }
-
-    // Dairy Product Type
-    $dairy_product_type = $_POST['_dairy_product_type'];
-    if( !empty( $dairy_product_type ) ) {
-        update_post_meta( $post_id, '_dairy_product_type', esc_attr( $dairy_product_type ) );
-    }
-
-    // Fat Content
-    $dairy_fat_content = $_POST['_dairy_fat_content'];
-    if( !empty( $dairy_fat_content ) ) {
-        update_post_meta( $post_id, '_dairy_fat_content', esc_attr( $dairy_fat_content ) );
-    }
-
-    // Unit Size
-    $dairy_unit_size = $_POST['_dairy_unit_size'];
-    if( !empty( $dairy_unit_size ) ) {
-        update_post_meta( $post_id, '_dairy_unit_size', esc_attr( $dairy_unit_size ) );
-    }
-
-    // Shelf Life
-    $dairy_shelf_life = $_POST['_dairy_shelf_life'];
-    if( !empty( $dairy_shelf_life ) ) {
-        update_post_meta( $post_id, '_dairy_shelf_life', esc_attr( $dairy_shelf_life ) );
-    }
-
-    // Storage Requirements
-    $dairy_storage = $_POST['_dairy_storage'];
-    if( !empty( $dairy_storage ) ) {
-        update_post_meta( $post_id, '_dairy_storage', esc_attr( $dairy_storage ) );
-    }
-
-    // Origin/Source
-    $dairy_origin = $_POST['_dairy_origin'];
-    if( !empty( $dairy_origin ) ) {
-        update_post_meta( $post_id, '_dairy_origin', esc_attr( $dairy_origin ) );
-    }
-
-    // Feed Type
-    $feed_type = $_POST['_feed_type'];
-    if( !empty( $feed_type ) ) {
-        update_post_meta( $post_id, '_feed_type', esc_attr( $feed_type ) );
-    }
-
-    // Package Size
-    $feed_package_size = $_POST['_feed_package_size'];
-    if( !empty( $feed_package_size ) ) {
-        update_post_meta( $post_id, '_feed_package_size', esc_attr( $feed_package_size ) );
-    }
-
-    // Protein Content
-    $feed_protein_content = $_POST['_feed_protein_content'];
-    if( !empty( $feed_protein_content ) ) {
-        update_post_meta( $post_id, '_feed_protein_content', esc_attr( $feed_protein_content ) );
-    }
-
-    // Suitable For
-    $feed_suitable_for = $_POST['_feed_suitable_for'];
-    if( !empty( $feed_suitable_for ) ) {
-        update_post_meta( $post_id, '_feed_suitable_for', esc_attr( $feed_suitable_for ) );
-    }
-
-    // Nutritional Information
-    $feed_nutrition_info = $_POST['_feed_nutrition_info'];
-    if( !empty( $feed_nutrition_info ) ) {
-        update_post_meta( $post_id, '_feed_nutrition_info', esc_attr( $feed_nutrition_info ) );
-    }
-
-    // Health Status
-    $cow_health_status = $_POST['_cow_health_status'];
-    if( !empty( $cow_health_status ) ) {
-        update_post_meta( $post_id, '_cow_health_status', esc_attr( $cow_health_status ) );
-    }
-
-    // Vaccination Status
+    // Handle checkbox field separately
     $cow_vaccinated = isset( $_POST['_cow_vaccinated'] ) ? 'yes' : 'no';
     update_post_meta( $post_id, '_cow_vaccinated', $cow_vaccinated );
-
-    // Additional Notes
-    $product_notes = $_POST['_product_notes'];
-    if( !empty( $product_notes ) ) {
-        update_post_meta( $post_id, '_product_notes', esc_attr( $product_notes ) );
-    }
 
     // Auto-assign taxonomies based on product info
     hello_elementor_child_auto_assign_taxonomies( $post_id );
@@ -672,149 +667,168 @@ add_action( 'woocommerce_process_product_meta', 'hello_elementor_child_save_prod
 
 /**
  * Automatically assign taxonomies based on product info fields
+ * 
+ * @param int $post_id The product post ID
  */
 function hello_elementor_child_auto_assign_taxonomies( $post_id ) {
     $product_info_type = get_post_meta( $post_id, '_product_info_type', true );
 
-    // Assign main product type category to custom taxonomy
-    if( !empty( $product_info_type ) ) {
-        $category_mapping = array(
-            'livestock' => 'livestock',
-            'dairy_product' => 'dairy-product',
-            'feed' => 'animal-feed'
-        );
+    if ( empty( $product_info_type ) ) {
+        return;
+    }
 
-        if( isset( $category_mapping[ $product_info_type ] ) ) {
-            $category_slug = $category_mapping[ $product_info_type ];
-            $category_term = get_term_by( 'slug', $category_slug, 'product_type_category' );
+    // Category mapping configuration
+    $category_mapping = array(
+        'livestock'     => 'livestock',
+        'dairy_product' => 'dairy-product',
+        'feed'          => 'animal-feed'
+    );
 
-            if( $category_term ) {
-                wp_set_object_terms( $post_id, $category_term->term_id, 'product_type_category', false );
-            }
+    $wc_category_mapping = array(
+        'livestock'     => 'Livestock',
+        'dairy_product' => 'Dairy Products',
+        'feed'          => 'Animal Feed'
+    );
+
+    // Assign custom product type category
+    if ( isset( $category_mapping[ $product_info_type ] ) ) {
+        $category_slug = $category_mapping[ $product_info_type ];
+        $category_term = get_term_by( 'slug', $category_slug, 'product_type_category' );
+
+        if ( $category_term ) {
+            wp_set_object_terms( $post_id, $category_term->term_id, 'product_type_category', false );
         }
     }
 
-    // Also assign to standard WooCommerce product categories
-    if( !empty( $product_info_type ) ) {
-        $wc_category_mapping = array(
-            'livestock' => 'Livestock',
-            'dairy_product' => 'Dairy Products',
-            'feed' => 'Animal Feed'
-        );
+    // Assign WooCommerce product category
+    if ( isset( $wc_category_mapping[ $product_info_type ] ) ) {
+        $category_name = $wc_category_mapping[ $product_info_type ];
+        $wc_category = get_term_by( 'name', $category_name, 'product_cat' );
 
-        if( isset( $wc_category_mapping[ $product_info_type ] ) ) {
-            $category_name = $wc_category_mapping[ $product_info_type ];
+        if ( ! $wc_category ) {
+            // Create category if it doesn't exist
+            $category_data = wp_insert_term(
+                $category_name,
+                'product_cat',
+                array(
+                    'description' => sprintf( __( 'Products in the %s category', 'hello-elementor-child' ), $category_name ),
+                    'slug'        => sanitize_title( $category_name )
+                )
+            );
 
-            // Check if WooCommerce category exists, if not create it
-            $wc_category = get_term_by( 'name', $category_name, 'product_cat' );
-
-            if( !$wc_category ) {
-                $category_data = wp_insert_term(
-                    $category_name,
-                    'product_cat',
-                    array(
-                        'description' => sprintf( __('Products in the %s category', 'hello-elementor-child'), $category_name ),
-                        'slug' => sanitize_title( $category_name )
-                    )
-                );
-
-                if( !is_wp_error( $category_data ) ) {
-                    $wc_category_id = $category_data['term_id'];
-                }
-            } else {
-                $wc_category_id = $wc_category->term_id;
+            if ( ! is_wp_error( $category_data ) ) {
+                $wc_category_id = $category_data['term_id'];
             }
+        } else {
+            $wc_category_id = $wc_category->term_id;
+        }
 
-            // Assign to WooCommerce product category
-            if( isset( $wc_category_id ) ) {
-                wp_set_object_terms( $post_id, $wc_category_id, 'product_cat', false );
-            }
+        if ( isset( $wc_category_id ) ) {
+            wp_set_object_terms( $post_id, $wc_category_id, 'product_cat', false );
         }
     }
 
-    // Assign brands based on specific product types
-    $brands_to_assign = array();
+    // Assign brands based on product type
+    $brands_to_assign = hello_elementor_child_get_brands_for_product( $post_id, $product_info_type );
 
-    if( $product_info_type === 'livestock' ) {
-        // Get cow type and breed for livestock
-        $cow_type = get_post_meta( $post_id, '_cow_type', true );
-        $cow_breed = get_post_meta( $post_id, '_cow_breed', true );
-
-        if( !empty( $cow_type ) ) {
-            $cow_type_mapping = array(
-                'ox' => 'ox',
-                'dairy_cow' => 'dairy-cow',
-                'bokna' => 'bokna'
-            );
-
-            if( isset( $cow_type_mapping[ $cow_type ] ) ) {
-                $brands_to_assign[] = $cow_type_mapping[ $cow_type ];
-            }
-        }
-
-        if( !empty( $cow_breed ) ) {
-            $breed_slug = sanitize_title( strtolower( $cow_breed ) );
-            $brands_to_assign[] = $breed_slug;
-        }
-
-    } elseif( $product_info_type === 'dairy_product' ) {
-        // Get dairy product type
-        $dairy_product_type = get_post_meta( $post_id, '_dairy_product_type', true );
-
-        if( !empty( $dairy_product_type ) ) {
-            $dairy_mapping = array(
-                'milk' => 'milk',
-                'butter' => 'butter',
-                'cheese' => 'cheese',
-                'cream' => 'cream',
-                'ghee' => 'ghee'
-            );
-
-            if( isset( $dairy_mapping[ $dairy_product_type ] ) ) {
-                $brands_to_assign[] = $dairy_mapping[ $dairy_product_type ];
-            }
-        }
-
-    } elseif( $product_info_type === 'feed' ) {
-        // Get feed type
-        $feed_type = get_post_meta( $post_id, '_feed_type', true );
-
-        if( !empty( $feed_type ) ) {
-            $feed_mapping = array(
-                'cattle_feed' => 'cattle-feed',
-                'dairy_feed' => 'dairy-feed',
-                'calf_feed' => 'calf-feed',
-                'silage' => 'silage'
-            );
-
-            if( isset( $feed_mapping[ $feed_type ] ) ) {
-                $brands_to_assign[] = $feed_mapping[ $feed_type ];
-            }
-        }
-    }
-
-    // Assign brands/sub-types
-    if( !empty( $brands_to_assign ) ) {
+    if ( ! empty( $brands_to_assign ) ) {
         $brand_term_ids = array();
 
-        foreach( $brands_to_assign as $brand_slug ) {
+        foreach ( $brands_to_assign as $brand_slug ) {
             $brand_term = get_term_by( 'slug', $brand_slug, 'product_brand' );
-            if( $brand_term ) {
+            
+            if ( $brand_term ) {
                 $brand_term_ids[] = $brand_term->term_id;
             } else {
                 // Create the brand if it doesn't exist
-                $brand_name = ucwords( str_replace( '-', ' ', $brand_slug ) );
-                $new_term = wp_insert_term( $brand_name, 'product_brand', array( 'slug' => $brand_slug ) );
-                if( !is_wp_error( $new_term ) ) {
+                $brand_name = ucwords( str_replace( array( '-', '_' ), ' ', $brand_slug ) );
+                $new_term = wp_insert_term( 
+                    $brand_name, 
+                    'product_brand', 
+                    array( 'slug' => $brand_slug ) 
+                );
+                
+                if ( ! is_wp_error( $new_term ) ) {
                     $brand_term_ids[] = $new_term['term_id'];
                 }
             }
         }
 
-        if( !empty( $brand_term_ids ) ) {
+        if ( ! empty( $brand_term_ids ) ) {
             wp_set_object_terms( $post_id, $brand_term_ids, 'product_brand', false );
         }
     }
+}
+
+/**
+ * Get brands to assign based on product type and meta data
+ * 
+ * @param int    $post_id           The product post ID
+ * @param string $product_info_type The product type
+ * @return array Array of brand slugs to assign
+ */
+function hello_elementor_child_get_brands_for_product( $post_id, $product_info_type ) {
+    $brands = array();
+
+    switch ( $product_info_type ) {
+        case 'livestock':
+            $cow_type = get_post_meta( $post_id, '_cow_type', true );
+            $cow_breed = get_post_meta( $post_id, '_cow_breed', true );
+
+            if ( ! empty( $cow_type ) ) {
+                $cow_type_mapping = array(
+                    'ox'        => 'ox',
+                    'dairy_cow' => 'dairy-cow',
+                    'bokna'     => 'bokna'
+                );
+
+                if ( isset( $cow_type_mapping[ $cow_type ] ) ) {
+                    $brands[] = $cow_type_mapping[ $cow_type ];
+                }
+            }
+
+            if ( ! empty( $cow_breed ) ) {
+                $brands[] = sanitize_title( strtolower( $cow_breed ) );
+            }
+            break;
+
+        case 'dairy_product':
+            $dairy_product_type = get_post_meta( $post_id, '_dairy_product_type', true );
+
+            if ( ! empty( $dairy_product_type ) ) {
+                $dairy_mapping = array(
+                    'milk'   => 'milk',
+                    'butter' => 'butter',
+                    'cheese' => 'cheese',
+                    'cream'  => 'cream',
+                    'ghee'   => 'ghee'
+                );
+
+                if ( isset( $dairy_mapping[ $dairy_product_type ] ) ) {
+                    $brands[] = $dairy_mapping[ $dairy_product_type ];
+                }
+            }
+            break;
+
+        case 'feed':
+            $feed_type = get_post_meta( $post_id, '_feed_type', true );
+
+            if ( ! empty( $feed_type ) ) {
+                $feed_mapping = array(
+                    'cattle_feed' => 'cattle-feed',
+                    'dairy_feed'  => 'dairy-feed',
+                    'calf_feed'   => 'calf-feed',
+                    'silage'      => 'silage'
+                );
+
+                if ( isset( $feed_mapping[ $feed_type ] ) ) {
+                    $brands[] = $feed_mapping[ $feed_type ];
+                }
+            }
+            break;
+    }
+
+    return $brands;
 }
 
 /**
@@ -849,6 +863,96 @@ function hello_elementor_child_remove_metaboxes() {
 add_action( 'add_meta_boxes', 'hello_elementor_child_remove_metaboxes', 20 );
 
 /**
+ * Add custom column to products admin list
+ * 
+ * @param array $columns Existing columns
+ * @return array Modified columns
+ */
+function hello_elementor_child_add_product_columns( $columns ) {
+    $new_columns = array();
+    
+    foreach ( $columns as $key => $value ) {
+        $new_columns[ $key ] = $value;
+        
+        // Add our column after the product name
+        if ( $key === 'name' ) {
+            $new_columns['product_info_type'] = __( 'Product Type', 'hello-elementor-child' );
+        }
+    }
+    
+    return $new_columns;
+}
+add_filter( 'manage_edit-product_columns', 'hello_elementor_child_add_product_columns', 20 );
+
+/**
+ * Display custom column content in products admin list
+ * 
+ * @param string $column  Column name
+ * @param int    $post_id Post ID
+ */
+function hello_elementor_child_display_product_column( $column, $post_id ) {
+    if ( $column === 'product_info_type' ) {
+        $product_type = get_post_meta( $post_id, '_product_info_type', true );
+        
+        if ( ! empty( $product_type ) ) {
+            $type_labels = array(
+                'livestock'     => __( 'Livestock', 'hello-elementor-child' ),
+                'dairy_product' => __( 'Dairy Product', 'hello-elementor-child' ),
+                'feed'          => __( 'Animal Feed', 'hello-elementor-child' )
+            );
+            
+            $label = isset( $type_labels[ $product_type ] ) ? $type_labels[ $product_type ] : ucfirst( $product_type );
+            
+            // Add color-coded badge
+            $colors = array(
+                'livestock'     => '#4CAF50',
+                'dairy_product' => '#2196F3',
+                'feed'          => '#FF9800'
+            );
+            
+            $color = isset( $colors[ $product_type ] ) ? $colors[ $product_type ] : '#999';
+            
+            echo '<span style="display:inline-block;padding:3px 8px;border-radius:3px;background:' . esc_attr( $color ) . ';color:#fff;font-size:11px;font-weight:600;">' . esc_html( $label ) . '</span>';
+        } else {
+            echo '<span style="color:#999;">—</span>';
+        }
+    }
+}
+add_action( 'manage_product_posts_custom_column', 'hello_elementor_child_display_product_column', 10, 2 );
+
+/**
+ * Make product type column sortable
+ * 
+ * @param array $columns Sortable columns
+ * @return array Modified sortable columns
+ */
+function hello_elementor_child_sortable_product_columns( $columns ) {
+    $columns['product_info_type'] = 'product_info_type';
+    return $columns;
+}
+add_filter( 'manage_edit-product_sortable_columns', 'hello_elementor_child_sortable_product_columns' );
+
+/**
+ * Handle sorting by product type
+ * 
+ * @param WP_Query $query The WordPress query object
+ */
+function hello_elementor_child_product_type_orderby( $query ) {
+    if ( ! is_admin() || ! $query->is_main_query() ) {
+        return;
+    }
+
+    $orderby = $query->get( 'orderby' );
+
+    if ( 'product_info_type' === $orderby ) {
+        $query->set( 'meta_key', '_product_info_type' );
+        $query->set( 'orderby', 'meta_value' );
+    }
+}
+add_action( 'pre_get_posts', 'hello_elementor_child_product_type_orderby' );
+
+
+/**
  * Add WhatsApp button to single product page
  */
 function hello_elementor_child_add_whatsapp_button() {
@@ -858,33 +962,48 @@ function hello_elementor_child_add_whatsapp_button() {
         return;
     }
 
+    // Get WhatsApp number from settings or use default
+    $whatsapp_number = get_option( 'whatsapp_contact_number', '+8801780884888' );
+    
+    // Clean phone number (remove spaces, dashes, etc.)
+    $whatsapp_number = preg_replace( '/[^0-9+]/', '', $whatsapp_number );
+
+    // Validate phone number
+    if ( empty( $whatsapp_number ) ) {
+        return;
+    }
+
     // Get product details
     $product_name = $product->get_name();
     $product_url = get_permalink( $product->get_id() );
 
-    // Create WhatsApp message with your specified format
-    $message = 'Assalamu alaikum, i want to talk about "' . $product_name . '" which link is ' . $product_url;
+    // Create WhatsApp message with proper formatting
+    $message = sprintf(
+        'Assalamu alaikum, I want to talk about "%s" which link is %s',
+        $product_name,
+        $product_url
+    );
 
     // URL encode the message
-    $encoded_message = urlencode( $message );
-
-    // Use your specific WhatsApp number
-    $whatsapp_number = "+8801780884888";
-
-    // Clean phone number (remove spaces, dashes, etc.)
-    $whatsapp_number = preg_replace( '/[^0-9+]/', '', $whatsapp_number );
+    $encoded_message = rawurlencode( $message );
 
     // Generate WhatsApp URL
-    $whatsapp_url = "https://wa.me/" . $whatsapp_number . "?text=" . $encoded_message;
+    $whatsapp_url = 'https://wa.me/' . $whatsapp_number . '?text=' . $encoded_message;
 
-    // Output the WhatsApp button
-    echo '<div class="whatsapp-floating-button">';
-    echo '<a href="' . esc_url( $whatsapp_url ) . '" target="_blank" class="whatsapp-button-circle">';
-    echo '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">';
-    echo '<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.785"/>';
-    echo '</svg>';
-    echo '</a>';
-    echo '</div>';
+    // Output the WhatsApp button with improved styling
+    ?>
+    <div class="whatsapp-floating-button">
+        <a href="<?php echo esc_url( $whatsapp_url ); ?>" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="whatsapp-button-circle"
+           aria-label="<?php esc_attr_e( 'Contact us on WhatsApp', 'hello-elementor-child' ); ?>">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.785"/>
+            </svg>
+        </a>
+    </div>
+    <?php
 }
 
 // Add WhatsApp button after the add to cart button
@@ -922,3 +1041,149 @@ function hello_elementor_child_whatsapp_number_callback() {
     echo '<input type="text" id="whatsapp_contact_number" name="whatsapp_contact_number" value="' . esc_attr( $value ) . '" placeholder="e.g., +1234567890" />';
     echo '<p class="description">Enter the default WhatsApp number (with country code) for product inquiries. If not set, the product\'s contact number will be used.</p>';
 }
+
+/**
+ * Get formatted product information for display
+ * 
+ * @param int $product_id Product ID (optional, uses current product if not provided)
+ * @return array Array of formatted product information
+ */
+function hello_elementor_child_get_product_info( $product_id = null ) {
+    if ( ! $product_id ) {
+        global $product;
+        if ( ! $product ) {
+            return array();
+        }
+        $product_id = $product->get_id();
+    }
+
+    $product_type = get_post_meta( $product_id, '_product_info_type', true );
+    $info = array(
+        'type' => $product_type,
+        'fields' => array()
+    );
+
+    if ( empty( $product_type ) ) {
+        return $info;
+    }
+
+    // Get type-specific fields
+    switch ( $product_type ) {
+        case 'livestock':
+            $fields = array(
+                'cow_type' => __( 'Cow Type', 'hello-elementor-child' ),
+                'cow_breed' => __( 'Breed', 'hello-elementor-child' ),
+                'cow_age' => __( 'Age', 'hello-elementor-child' ),
+                'cow_weight' => __( 'Weight', 'hello-elementor-child' ),
+                'cow_color' => __( 'Color', 'hello-elementor-child' ),
+                'cow_health_status' => __( 'Health Status', 'hello-elementor-child' ),
+                'cow_vaccinated' => __( 'Vaccinated', 'hello-elementor-child' ),
+            );
+            break;
+
+        case 'dairy_product':
+            $fields = array(
+                'dairy_product_type' => __( 'Product Type', 'hello-elementor-child' ),
+                'dairy_fat_content' => __( 'Fat Content', 'hello-elementor-child' ),
+                'dairy_unit_size' => __( 'Unit Size', 'hello-elementor-child' ),
+                'dairy_shelf_life' => __( 'Shelf Life', 'hello-elementor-child' ),
+                'dairy_storage' => __( 'Storage', 'hello-elementor-child' ),
+                'dairy_origin' => __( 'Origin', 'hello-elementor-child' ),
+            );
+            break;
+
+        case 'feed':
+            $fields = array(
+                'feed_type' => __( 'Feed Type', 'hello-elementor-child' ),
+                'feed_package_size' => __( 'Package Size', 'hello-elementor-child' ),
+                'feed_protein_content' => __( 'Protein Content', 'hello-elementor-child' ),
+                'feed_suitable_for' => __( 'Suitable For', 'hello-elementor-child' ),
+                'feed_nutrition_info' => __( 'Nutritional Info', 'hello-elementor-child' ),
+            );
+            break;
+
+        default:
+            $fields = array();
+    }
+
+    // Get field values
+    foreach ( $fields as $key => $label ) {
+        $value = get_post_meta( $product_id, '_' . $key, true );
+        if ( ! empty( $value ) ) {
+            // Format vaccinated field
+            if ( $key === 'cow_vaccinated' ) {
+                $value = ( $value === 'yes' ) ? __( 'Yes', 'hello-elementor-child' ) : __( 'No', 'hello-elementor-child' );
+            }
+            $info['fields'][ $label ] = $value;
+        }
+    }
+
+    // Add notes if available
+    $notes = get_post_meta( $product_id, '_product_notes', true );
+    if ( ! empty( $notes ) ) {
+        $info['notes'] = $notes;
+    }
+
+    return $info;
+}
+
+/**
+ * Add custom CSS for WhatsApp button and admin styles
+ */
+function hello_elementor_child_custom_styles() {
+    ?>
+    <style>
+        /* WhatsApp Button Styles */
+        .whatsapp-floating-button {
+            margin: 20px 0;
+        }
+        
+        .whatsapp-button-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: #25D366;
+            color: #fff;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+        }
+        
+        .whatsapp-button-circle:hover {
+            background: #128C7E;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.5);
+        }
+        
+        .whatsapp-button-circle svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Admin Product Info Tab Styles */
+        #product_info_product_data h4 {
+            margin: 15px 12px 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+            color: #23282d;
+        }
+
+        #product_info_product_data .options_group {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        /* Admin Settings Styles */
+        #whatsapp_contact_number {
+            width: 300px;
+        }
+    </style>
+    <?php
+}
+add_action( 'wp_head', 'hello_elementor_child_custom_styles' );
+add_action( 'admin_head', 'hello_elementor_child_custom_styles' );
+
