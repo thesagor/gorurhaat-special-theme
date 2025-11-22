@@ -824,3 +824,7 @@ Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, fe
 #product_branddiv {
     display: none !important;
 }
+
+.product-slider-wrapper {
+    overflow: hidden;
+}

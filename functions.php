@@ -47,6 +47,60 @@ function hello_elementor_child_add_woocommerce_support() {
 add_action( 'after_setup_theme', 'hello_elementor_child_add_woocommerce_support' );
 
 /**
+ * Register Custom Elementor Widgets
+ */
+function hello_elementor_child_register_elementor_widgets( $widgets_manager ) {
+    // Include widget files
+    require_once( get_stylesheet_directory() . '/widgets/product-grid-widget.php' );
+    require_once( get_stylesheet_directory() . '/widgets/product-slider-widget.php' );
+
+    // Register widgets
+    $widgets_manager->register( new \Hello_Elementor_Product_Grid_Widget() );
+    $widgets_manager->register( new \Hello_Elementor_Product_Slider_Widget() );
+}
+add_action( 'elementor/widgets/register', 'hello_elementor_child_register_elementor_widgets' );
+
+/**
+ * Enqueue Swiper library for slider widget
+ */
+function hello_elementor_child_enqueue_swiper() {
+    // Enqueue Swiper CSS
+    wp_enqueue_style(
+        'swiper',
+        'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
+        [],
+        '11.0.0'
+    );
+
+    // Enqueue Swiper JS
+    wp_enqueue_script(
+        'swiper',
+        'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js',
+        [ 'jquery' ],
+        '11.0.0',
+        true
+    );
+}
+add_action( 'wp_enqueue_scripts', 'hello_elementor_child_enqueue_swiper' );
+add_action( 'elementor/frontend/after_enqueue_scripts', 'hello_elementor_child_enqueue_swiper' );
+
+
+/**
+ * Add custom widget categories
+ */
+function hello_elementor_child_add_elementor_widget_categories( $elements_manager ) {
+    $elements_manager->add_category(
+        'woocommerce-elements',
+        [
+            'title' => __( 'WooCommerce Elements', 'hello-elementor-child' ),
+            'icon' => 'fa fa-shopping-cart',
+        ]
+    );
+}
+add_action( 'elementor/elements/categories_registered', 'hello_elementor_child_add_elementor_widget_categories' );
+
+
+/**
  * Create custom taxonomies for product organization
  */
 function hello_elementor_child_create_product_taxonomies() {
@@ -1128,62 +1182,16 @@ function hello_elementor_child_get_product_info( $product_id = null ) {
 }
 
 /**
- * Add custom CSS for WhatsApp button and admin styles
+ * Enqueue custom CSS file
  */
-function hello_elementor_child_custom_styles() {
-    ?>
-    <style>
-        /* WhatsApp Button Styles */
-        .whatsapp-floating-button {
-            margin: 20px 0;
-        }
-        
-        .whatsapp-button-circle {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background: #25D366;
-            color: #fff;
-            border-radius: 50%;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
-        }
-        
-        .whatsapp-button-circle:hover {
-            background: #128C7E;
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.5);
-        }
-        
-        .whatsapp-button-circle svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        /* Admin Product Info Tab Styles */
-        #product_info_product_data h4 {
-            margin: 15px 12px 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-            font-size: 13px;
-            color: #23282d;
-        }
-
-        #product_info_product_data .options_group {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-
-        /* Admin Settings Styles */
-        #whatsapp_contact_number {
-            width: 300px;
-        }
-    </style>
-    <?php
+function hello_elementor_child_enqueue_custom_styles() {
+    wp_enqueue_style(
+        'hello-elementor-child-custom-styles',
+        get_stylesheet_directory_uri() . '/inc/custom-styles.css',
+        [],
+        HELLO_ELEMENTOR_CHILD_VERSION
+    );
 }
-add_action( 'wp_head', 'hello_elementor_child_custom_styles' );
-add_action( 'admin_head', 'hello_elementor_child_custom_styles' );
+add_action( 'wp_enqueue_scripts', 'hello_elementor_child_enqueue_custom_styles' );
+add_action( 'admin_enqueue_scripts', 'hello_elementor_child_enqueue_custom_styles' );
 
