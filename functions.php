@@ -135,8 +135,7 @@ function hello_elementor_child_create_default_taxonomy_terms() {
         'dairy-cow' => 'Dairy Cow',
         'bokna' => 'Bokna',
         'holstein' => 'Holstein',
-        'jersey' => 'Jersey',
-        'angus' => 'Angus'
+        'jersey' => 'Jersey'
     );
 
     // Create dairy product sub-brands
@@ -144,7 +143,6 @@ function hello_elementor_child_create_default_taxonomy_terms() {
         'milk' => 'Milk',
         'butter' => 'Butter',
         'cheese' => 'Cheese',
-        'yogurt' => 'Yogurt',
         'cream' => 'Cream',
         'ghee' => 'Ghee'
     );
@@ -154,9 +152,8 @@ function hello_elementor_child_create_default_taxonomy_terms() {
         'cattle-feed' => 'Cattle Feed',
         'dairy-feed' => 'Dairy Feed',
         'calf-feed' => 'Calf Feed',
-        'hay' => 'Hay',
-        'silage' => 'Silage',
-        'concentrate' => 'Concentrate'
+        'mixed-feed' => 'Ready Mixed',
+        'silage' => 'Silage'
     );
 
     $all_brands = array_merge( $livestock_brands, $dairy_brands, $feed_brands );
@@ -769,7 +766,6 @@ function hello_elementor_child_auto_assign_taxonomies( $post_id ) {
                 'milk' => 'milk',
                 'butter' => 'butter',
                 'cheese' => 'cheese',
-                'yogurt' => 'yogurt',
                 'cream' => 'cream',
                 'ghee' => 'ghee'
             );
@@ -788,9 +784,7 @@ function hello_elementor_child_auto_assign_taxonomies( $post_id ) {
                 'cattle_feed' => 'cattle-feed',
                 'dairy_feed' => 'dairy-feed',
                 'calf_feed' => 'calf-feed',
-                'hay' => 'hay',
-                'silage' => 'silage',
-                'concentrate' => 'concentrate'
+                'silage' => 'silage'
             );
 
             if( isset( $feed_mapping[ $feed_type ] ) ) {
