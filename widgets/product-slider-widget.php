@@ -712,7 +712,10 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
                 <div class="swiper <?php echo esc_attr( $slider_id ); ?>">
                     <div class="swiper-wrapper">
                         <?php while ( $products->have_posts() ) : $products->the_post(); ?>
-                            <?php global $product; ?>
+                            <?php 
+                            global $product; 
+                            $product_id = $product->get_id();
+                            ?>
                             <div class="swiper-slide">
                                 <div class="product-slide-card">
                                     <div class="product-slide-image">
@@ -729,9 +732,9 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
                                         <div class="product-slide-price">
                                             <?php echo $product->get_price_html(); ?>
                                         </div>
-                                        <a href="<?php echo esc_url( get_permalink() ); ?>" class="product-slide-button">
-                                            <?php esc_html_e( 'View Details', 'hello-elementor-child' ); ?>
-                                        </a>
+                                        <button class="product-slide-button ajax-add-to-cart" data-product-id="<?php echo esc_attr( $product_id ); ?>">
+                                            <?php esc_html_e( 'Add to Cart', 'hello-elementor-child' ); ?>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
