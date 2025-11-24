@@ -103,7 +103,7 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
                 'options' => $this->get_product_categories(),
                 'default' => [],
                 'label_block' => true,
-                'description' => __( 'Select categories to filter products. Leave empty to show all.', 'hello-elementor-child' ),
+                'description' => __( 'Select categories to filter products. Includes main categories (Livestock, Dairy Products, Animal Feed) and their subcategories (Ox, Milk, Cattle Feed, etc.). Leave empty to show all products.', 'hello-elementor-child' ),
             ]
         );
 
@@ -649,7 +649,7 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
     }
 
     /**
-     * Get product categories for dropdown
+     * Get product categories for dropdown (hierarchical)
      *
      * @return array
      */
@@ -657,12 +657,33 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
         $categories = get_terms( [
             'taxonomy' => 'product_cat',
             'hide_empty' => false,
+            'orderby' => 'parent',
         ] );
 
         $options = [];
         if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) {
+            // Build hierarchical structure
+            $parent_categories = [];
+            $child_categories = [];
+            
             foreach ( $categories as $category ) {
-                $options[ $category->term_id ] = $category->name;
+                if ( $category->parent == 0 ) {
+                    $parent_categories[] = $category;
+                } else {
+                    $child_categories[ $category->parent ][] = $category;
+                }
+            }
+            
+            // Add parent categories first
+            foreach ( $parent_categories as $parent ) {
+                $options[ $parent->term_id ] = $parent->name;
+                
+                // Add child categories under parent
+                if ( isset( $child_categories[ $parent->term_id ] ) ) {
+                    foreach ( $child_categories[ $parent->term_id ] as $child ) {
+                        $options[ $child->term_id ] = '— ' . $child->name;
+                    }
+                }
             }
         }
 
@@ -733,7 +754,7 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
                                             <?php echo $product->get_price_html(); ?>
                                         </div>
                                         <button class="product-slide-button ajax-add-to-cart" data-product-id="<?php echo esc_attr( $product_id ); ?>">
-                                            <?php esc_html_e( 'Add to Cart', 'hello-elementor-child' ); ?>
+                                            <?php esc_html_e( 'কিনুন', 'hello-elementor-child' ); ?>
                                         </button>
                                     </div>
                                 </div>
