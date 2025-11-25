@@ -22,7 +22,15 @@ function hello_elementor_child_add_whatsapp_button() {
 
     // Get product details
     $product_name = $product->get_name();
-    $product_url = get_permalink( $product->get_id() );
+    $product_id = $product->get_id();
+    
+    // Use WordPress shortlink instead of full permalink
+    $product_url = wp_get_shortlink( $product_id );
+    
+    // If shortlink is not available, use regular permalink
+    if ( empty( $product_url ) ) {
+        $product_url = get_permalink( $product_id );
+    }
 
     // Create WhatsApp message with proper formatting
     $message = sprintf(
