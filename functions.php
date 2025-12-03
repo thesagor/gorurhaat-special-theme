@@ -31,4 +31,7 @@ require_once get_stylesheet_directory() . '/inc/cart-drawer.php';
 require_once get_stylesheet_directory() . '/inc/single-product.php';
 require_once get_stylesheet_directory() . '/inc/order-qrcode.php';
 require_once get_stylesheet_directory() . '/inc/seo-optimization.php'; // SEO with Gorurhaat keyword
+require_once get_stylesheet_directory() . '/inc/image-preloader.php'; // Product image preloader
+require_once get_stylesheet_directory() . '/inc/comment-spam-protection.php'; // Advanced spam protection
+require_once get_stylesheet_directory() . '/inc/spam-protection-admin.php'; // Spam protection admin settings
 

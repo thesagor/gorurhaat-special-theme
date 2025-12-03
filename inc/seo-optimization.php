@@ -27,7 +27,10 @@ function gorurhaat_seo_meta_tags() {
     
     // Page-specific meta
     if ( is_singular( 'product' ) ) {
-        global $post, $product;
+        global $post;
+        
+        // Get product object properly
+        $product = wc_get_product( get_the_ID() );
         
         $meta_title = get_the_title() . ' - Gorurhaat';
         $meta_description = wp_trim_words( get_the_excerpt(), 30, '...' ) . ' Available at Gorurhaat, Bangladesh\'s trusted livestock and agricultural marketplace.';
@@ -101,7 +104,7 @@ function gorurhaat_seo_meta_tags() {
     <meta name="twitter:description" content="<?php echo esc_attr( $meta_description ); ?>">
     <meta name="twitter:image" content="<?php echo esc_url( $og_image ); ?>">
     
-    <?php if ( is_singular( 'product' ) && $product ) : ?>
+    <?php if ( is_singular( 'product' ) && isset( $product ) && is_object( $product ) ) : ?>
     <!-- Product-Specific Meta Tags -->
     <meta property="product:price:amount" content="<?php echo esc_attr( $product->get_price() ); ?>">
     <meta property="product:price:currency" content="BDT">
@@ -124,7 +127,13 @@ add_action( 'wp_head', 'gorurhaat_seo_meta_tags', 1 );
  */
 function gorurhaat_schema_markup() {
     if ( is_singular( 'product' ) ) {
-        global $product;
+        // Get product object properly
+        $product = wc_get_product( get_the_ID() );
+        
+        // Validate product object
+        if ( ! $product || ! is_object( $product ) ) {
+            return;
+        }
         
         $schema = array(
             '@context' => 'https://schema.org/',

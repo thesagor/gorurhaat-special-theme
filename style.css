@@ -820,11 +820,18 @@ Tags: e-commerce, woocommerce, livestock, agriculture, marketplace, two-columns,
 }
 
 /* Hide category and brand metaboxes */
-#product_catdiv,
-#product_branddiv {
+#product_catdiv {
     display: none !important;
 }
 
+/* #product_branddiv {
+    display: none !important;
+} */
+
 .product-slider-wrapper {
     overflow: hidden;
+}
+
+div#primary {
+    padding: 20px 0px;
 }
