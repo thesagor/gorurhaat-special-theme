@@ -1,22 +1,29 @@
 <?php
 /**
  * Replace short description with product info on product pages
+ * Using hooks instead of template overrides for better compatibility
  */
 function hello_elementor_child_replace_short_description_with_product_info() {
     // Remove the default short description
     remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
 
-    // Add product info in place of short description using template
-    add_action( 'woocommerce_single_product_summary', 'hello_elementor_child_display_product_info_template', 20 );
+    // Add product info in place of short description using hooks
+    add_action( 'woocommerce_single_product_summary', 'hello_elementor_child_display_product_info_fields', 20 );
 }
 add_action( 'init', 'hello_elementor_child_replace_short_description_with_product_info' );
 
 /**
- * Load product info template instead of excerpt
+ * Replace default product meta with custom meta
+ * Using hooks instead of template overrides for better compatibility
  */
-function hello_elementor_child_display_product_info_template() {
-    wc_get_template( 'single-product/short-description.php' );
+function hello_elementor_child_replace_product_meta() {
+    // Remove the default meta
+    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
+    
+    // Add custom meta
+    add_action( 'woocommerce_single_product_summary', 'hello_elementor_child_display_custom_product_meta', 40 );
 }
+add_action( 'init', 'hello_elementor_child_replace_product_meta' );
 
 /**
  * Hide category and brand metaboxes in admin

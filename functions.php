@@ -24,6 +24,7 @@ require_once get_stylesheet_directory() . '/inc/woocommerce-support.php';
 require_once get_stylesheet_directory() . '/inc/elementor-widgets.php';
 require_once get_stylesheet_directory() . '/inc/taxonomies.php';
 require_once get_stylesheet_directory() . '/inc/product-info.php';
+require_once get_stylesheet_directory() . '/inc/product-info-display.php'; // Hook-based product info display
 require_once get_stylesheet_directory() . '/inc/product-display.php';
 require_once get_stylesheet_directory() . '/inc/whatsapp.php';
 require_once get_stylesheet_directory() . '/inc/cart-drawer.php';
