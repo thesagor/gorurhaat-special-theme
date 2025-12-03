@@ -30,4 +30,5 @@ require_once get_stylesheet_directory() . '/inc/whatsapp.php';
 require_once get_stylesheet_directory() . '/inc/cart-drawer.php';
 require_once get_stylesheet_directory() . '/inc/single-product.php';
 require_once get_stylesheet_directory() . '/inc/order-qrcode.php';
+require_once get_stylesheet_directory() . '/inc/seo-optimization.php'; // SEO with Gorurhaat keyword
 

@@ -695,3 +695,66 @@ body.cart-drawer-open { overflow: hidden; }
     clear: both;
 }
 
+/* ========================================
+   SEO Breadcrumbs Navigation
+   ======================================== */
+
+.gorurhaat-breadcrumbs {
+    margin: 20px 0;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid #3498db;
+}
+
+.gorurhaat-breadcrumbs ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.gorurhaat-breadcrumbs li {
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.gorurhaat-breadcrumbs li:not(:last-child)::after {
+    content: '›';
+    margin-left: 8px;
+    color: #999;
+    font-weight: bold;
+}
+
+.gorurhaat-breadcrumbs a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: 500;
+}
+
+.gorurhaat-breadcrumbs a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+.gorurhaat-breadcrumbs li:last-child {
+    color: #333;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .gorurhaat-breadcrumbs {
+        padding: 12px 15px;
+        margin: 15px 0;
+    }
+    
+    .gorurhaat-breadcrumbs li {
+        font-size: 13px;
+    }
+}

@@ -225,6 +225,15 @@
     border-radius: 5px;
 }
 
+.woocommerce #content div.product div.summary, .woocommerce div.product div.summary, .woocommerce-page div.product div.summary{
+    width: 100%;
+}
+
+ .woocommerce div.product div.images, .woocommerce-page div.product div.images {
+    float: left;
+    width: 100%;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .product-social-share {

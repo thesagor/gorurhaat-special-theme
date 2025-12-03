@@ -1,24 +1,55 @@
-=== Hello Elementor Child ===
+=== Gorurhaat - Livestock & Agricultural Marketplace Theme ===
 
-Contributors: elemntor
+Contributors: Sagor Ahmed
 Requires at least: 5.9
-Tested up to: 6.2
+Tested up to: 6.4
 Stable tag: 2.0.0
 Version: 2.0.0
-Requires PHP: 5.6
+Requires PHP: 7.4
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
-Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, featured-images, rtl-language-support, threaded-comments, translation-ready
+Tags: e-commerce, woocommerce, livestock, agriculture, marketplace, two-columns, custom-colors, custom-menu, custom-logo, featured-images, threaded-comments, translation-ready, rtl-language-support
 
-The Hello Elementor Child Theme is a starter blank child theme for [Hello Elementor](https://wordpress.org/themes/hello-elementor/) theme.
+Gorurhaat is a specialized WooCommerce theme for livestock, dairy products, and animal feed marketplace in Bangladesh. Built on Hello Elementor for optimal performance.
 
 == Description ==
 
-Hello Elementor Child is a lightweight and minimalist WordPress theme that was built specifically to work seamlessly with the Elementor page builder plugin. The theme is free, open-source, and designed for users who want a flexible, easy-to-use, and customizable website.
+**Gorurhaat** (গরুর হাট) is Bangladesh's premier WordPress theme designed specifically for online livestock and agricultural marketplaces. Built as a child theme of Hello Elementor and optimized for WooCommerce, Gorurhaat provides a complete solution for buying and selling cattle, dairy products, and animal feed online.
 
-The theme's main focus is on providing a solid foundation for users to build their own unique designs using the Elementor drag-and-drop site builder. It is optimized for speed and performance, and its simplicity and flexibility make it a great choice for both beginners and experienced website designers.
+= Key Features =
 
-The theme supports common WordPress features which can be extended using a child-theme. In addition, there are several ways to add custom styles. It can be done from **Elementor**, from the WordPress customizer, using a child-theme, or with an external plugin. To customize the theme further, visit [Elementor developers docs](https://developers.elementor.com/docs/hello-elementor-theme/).
+* **Specialized Product Types**: Custom fields for livestock (cattle, cows, oxen), dairy products, and animal feed
+* **Livestock Information**: Display breed, age, weight, color, health status, and vaccination details
+* **Dairy Product Details**: Show product type, fat content, shelf life, storage requirements, and origin
+* **Animal Feed Specifications**: Present feed type, package size, protein content, and nutrition information
+* **SEO Optimized**: Built-in SEO features with "Gorurhaat" keyword optimization, schema markup, and breadcrumbs
+* **Mobile Responsive**: Fully responsive design for all devices
+* **WooCommerce Integration**: Complete e-commerce functionality with cart, checkout, and payment
+* **WhatsApp Integration**: Direct customer communication via WhatsApp
+* **Product Sliders**: Beautiful Swiper-based product carousels
+* **Fast & Lightweight**: Built on Hello Elementor for optimal performance
+* **Translation Ready**: Supports both English and Bengali (বাংলা)
+
+= Perfect For =
+
+* Livestock marketplaces and cattle trading platforms
+* Dairy product online stores
+* Animal feed suppliers and distributors
+* Agricultural e-commerce websites
+* Gorurhaat (গরুর হাট) style marketplaces in Bangladesh
+
+= Technical Features =
+
+* Hook-based customizations for better WooCommerce compatibility
+* Schema.org structured data for better SEO
+* Open Graph and Twitter Card meta tags
+* Optimized product images with ALT tags
+* Breadcrumb navigation for better UX and SEO
+* Custom product taxonomies
+* Ajax cart drawer
+* QR code order tracking
+
+The theme is optimized for speed, SEO, and user experience. It follows WordPress and WooCommerce best practices and is regularly updated for compatibility.
 
 == Installation ==
 
