@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skeleton Screen Demo - Gorurhaat Theme</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .demo-header {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .demo-header h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        
+        .demo-header p {
+            margin: 0;
+            color: #666;
+        }
+        
+        .demo-section {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .demo-section h2 {
+            margin: 0 0 20px 0;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .demo-button {
+            padding: 10px 20px;
+            background: #0073aa;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .demo-button:hover {
+            background: #005a87;
+        }
+        
+        .demo-button.secondary {
+            background: #666;
+        }
+        
+        .demo-button.secondary:hover {
+            background: #444;
+        }
+        
+        .demo-output {
+            min-height: 200px;
+            border: 2px dashed #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+        }
+        
+        .code-block {
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #0073aa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .info-box p {
+            margin: 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🎨 Skeleton Screen Demo</h1>
+            <p>Interactive demonstration of skeleton loading screens for Gorurhaat Theme</p>
+        </div>
+
+        <!-- Product Grid Demo -->
+        <div class="demo-section">
+            <h2>1. Product Grid Skeleton</h2>
+            <div class="info-box">
+                <p><strong>Use Case:</strong> Shop pages, category pages, product listings</p>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-button" onclick="showProductGrid()">Show Skeleton</button>
+                <button class="demo-button secondary" onclick="hideAllSkeletons()">Hide Skeleton</button>
+            </div>
+            <div class="demo-output" id="product-grid-output"></div>
+            <div class="code-block">
+                <code>
+&lt;?php render_skeleton_product_grid( 8 ); ?&gt;<br>
+// or<br>
+[skeleton type="product-grid" count="8"]
+                </code>
+            </div>
+        </div>
+
+        <!-- Single Product Demo -->
+        <div class="demo-section">
+            <h2>2. Single Product Skeleton</h2>
+            <div class="info-box">
+                <p><strong>Use Case:</strong> Individual product pages</p>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-button" onclick="showSingleProduct()">Show Skeleton</button>
+                <button class="demo-button secondary" onclick="hideAllSkeletons()">Hide Skeleton</button>
+            </div>
+            <div class="demo-output" id="single-product-output"></div>
+            <div class="code-block">
+                <code>
+&lt;?php render_skeleton_single_product(); ?&gt;<br>
+// or<br>
+[skeleton type="single-product"]
+                </code>
+            </div>
+        </div>
+
+        <!-- Post List Demo -->
+        <div class="demo-section">
+            <h2>3. Blog Post List Skeleton</h2>
+            <div class="info-box">
+                <p><strong>Use Case:</strong> Blog pages, archive pages, news listings</p>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-button" onclick="showPostList()">Show Skeleton</button>
+                <button class="demo-button secondary" onclick="hideAllSkeletons()">Hide Skeleton</button>
+            </div>
+            <div class="demo-output" id="post-list-output"></div>
+            <div class="code-block">
+                <code>
+&lt;?php render_skeleton_post_list( 5 ); ?&gt;<br>
+// or<br>
+[skeleton type="post-list" count="5"]
+                </code>
+            </div>
+        </div>
+
+        <!-- Cart Demo -->
+        <div class="demo-section">
+            <h2>4. Shopping Cart Skeleton</h2>
+            <div class="info-box">
+                <p><strong>Use Case:</strong> Cart page, cart drawer, mini cart</p>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-button" onclick="showCart()">Show Skeleton</button>
+                <button class="demo-button secondary" onclick="hideAllSkeletons()">Hide Skeleton</button>
+            </div>
+            <div class="demo-output" id="cart-output"></div>
+            <div class="code-block">
+                <code>
+&lt;?php render_skeleton_cart( 3 ); ?&gt;<br>
+// or<br>
+[skeleton type="cart" count="3"]
+                </code>
+            </div>
+        </div>
+
+        <!-- Category Grid Demo -->
+        <div class="demo-section">
+            <h2>5. Category Grid Skeleton</h2>
+            <div class="info-box">
+                <p><strong>Use Case:</strong> Category listings, taxonomy pages</p>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-button" onclick="showCategoryGrid()">Show Skeleton</button>
+                <button class="demo-button secondary" onclick="hideAllSkeletons()">Hide Skeleton</button>
+            </div>
+            <div class="demo-output" id="category-grid-output"></div>
+            <div class="code-block">
+                <code>
+&lt;?php render_skeleton_category_grid( 6 ); ?&gt;<br>
+// or<br>
+[skeleton type="category-grid" count="6"]
+                </code>
+            </div>
+        </div>
+
+        <!-- Slider Demo -->
+        <div class="demo-section">
+            <h2>6. Slider/Carousel Skeleton</h2>
+            <div class="info-box">
+                <p><strong>Use Case:</strong> Product sliders, image carousels, featured content</p>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-button" onclick="showSlider()">Show Skeleton</button>
+                <button class="demo-button secondary" onclick="hideAllSkeletons()">Hide Skeleton</button>
+            </div>
+            <div class="demo-output" id="slider-output"></div>
+            <div class="code-block">
+                <code>
+&lt;?php render_skeleton_slider( 5 ); ?&gt;<br>
+// or<br>
+[skeleton type="slider" count="5"]
+                </code>
+            </div>
+        </div>
+
+        <!-- Widget Demo -->
+        <div class="demo-section">
+            <h2>7. Widget Skeleton</h2>
+            <div class="info-box">
+                <p><strong>Use Case:</strong> Sidebar widgets, recent posts, popular products</p>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-button" onclick="showWidget()">Show Skeleton</button>
+                <button class="demo-button secondary" onclick="hideAllSkeletons()">Hide Skeleton</button>
+            </div>
+            <div class="demo-output" id="widget-output"></div>
+            <div class="code-block">
+                <code>
+&lt;?php render_skeleton_widget( 4 ); ?&gt;<br>
+// or<br>
+[skeleton type="widget" count="4"]
+                </code>
+            </div>
+        </div>
+
+        <!-- AJAX Loading Demo -->
+        <div class="demo-section">
+            <h2>8. AJAX Loading with Skeleton</h2>
+            <div class="info-box">
+                <p><strong>Use Case:</strong> Dynamic content loading, filters, infinite scroll</p>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-button" onclick="simulateAjaxLoad()">Simulate AJAX Load</button>
+            </div>
+            <div class="demo-output" id="ajax-output"></div>
+            <div class="code-block">
+                <code>
+// JavaScript Example<br>
+SkeletonScreen.showSkeleton('product-grid', $('#container'), 8);<br>
+<br>
+$.ajax({<br>
+&nbsp;&nbsp;url: ajaxurl,<br>
+&nbsp;&nbsp;success: function(response) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SkeletonScreen.hideSkeleton();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;$('#container').html(response);<br>
+&nbsp;&nbsp;}<br>
+});
+                </code>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include skeleton screen CSS -->
+    <link rel="stylesheet" href="../inc/skeleton-screen.css">
+
+    <script>
+        // Demo functions
+        function showProductGrid() {
+            const output = document.getElementById('product-grid-output');
+            output.innerHTML = `
+                <div class="skeleton-container skeleton-product-grid">
+                    ${generateProductCards(8)}
+                </div>
+            `;
+        }
+
+        function showSingleProduct() {
+            const output = document.getElementById('single-product-output');
+            output.innerHTML = `
+                <div class="skeleton-container skeleton-single-product">
+                    <div class="skeleton-product-gallery">
+                        <div class="skeleton skeleton-main-image"></div>
+                        <div class="skeleton-thumbnail-grid">
+                            ${generateThumbnails(4)}
+                        </div>
+                    </div>
+                    <div class="skeleton-product-details">
+                        <div class="skeleton skeleton-product-category"></div>
+                        <div class="skeleton skeleton-product-name"></div>
+                        <div class="skeleton skeleton-product-price"></div>
+                        <div class="skeleton skeleton-product-meta"></div>
+                        <div class="skeleton-product-description">
+                            <div class="skeleton"></div>
+                            <div class="skeleton"></div>
+                            <div class="skeleton"></div>
+                            <div class="skeleton"></div>
+                        </div>
+                        <div class="skeleton skeleton-add-to-cart"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showPostList() {
+            const output = document.getElementById('post-list-output');
+            output.innerHTML = `
+                <div class="skeleton-container skeleton-post-list">
+                    ${generatePostItems(5)}
+                </div>
+            `;
+        }
+
+        function showCart() {
+            const output = document.getElementById('cart-output');
+            output.innerHTML = `
+                <div class="skeleton-container skeleton-cart">
+                    ${generateCartItems(3)}
+                </div>
+            `;
+        }
+
+        function showCategoryGrid() {
+            const output = document.getElementById('category-grid-output');
+            output.innerHTML = `
+                <div class="skeleton-container skeleton-category-grid">
+                    ${generateCategoryCards(6)}
+                </div>
+            `;
+        }
+
+        function showSlider() {
+            const output = document.getElementById('slider-output');
+            output.innerHTML = `
+                <div class="skeleton-container skeleton-slider">
+                    <div class="skeleton-slider-track">
+                        ${generateSliderItems(5)}
+                    </div>
+                </div>
+            `;
+        }
+
+        function showWidget() {
+            const output = document.getElementById('widget-output');
+            output.innerHTML = `
+                <div class="skeleton-container skeleton-widget">
+                    <div class="skeleton skeleton-widget-title"></div>
+                    ${generateWidgetItems(4)}
+                </div>
+            `;
+        }
+
+        function simulateAjaxLoad() {
+            const output = document.getElementById('ajax-output');
+            
+            // Show skeleton
+            output.innerHTML = `
+                <div class="skeleton-container skeleton-product-grid">
+                    ${generateProductCards(4)}
+                </div>
+            `;
+            
+            // Simulate loading delay
+            setTimeout(function() {
+                output.innerHTML = `
+                    <div class="skeleton-fade-in" style="padding: 40px; text-align: center; background: #e7f3ff; border-radius: 8px;">
+                        <h3 style="margin: 0 0 10px 0; color: #0073aa;">✅ Content Loaded!</h3>
+                        <p style="margin: 0; color: #666;">This simulates content being loaded via AJAX</p>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        function hideAllSkeletons() {
+            document.querySelectorAll('.demo-output').forEach(output => {
+                output.innerHTML = '';
+            });
+        }
+
+        // Helper functions
+        function generateProductCards(count) {
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                html += `
+                    <div class="skeleton-product-card">
+                        <div class="skeleton skeleton-product-image"></div>
+                        <div class="skeleton skeleton-product-title"></div>
+                        <div class="skeleton skeleton-product-price"></div>
+                        <div class="skeleton skeleton-product-rating"></div>
+                        <div class="skeleton skeleton-product-button"></div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function generateThumbnails(count) {
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                html += '<div class="skeleton skeleton-thumbnail"></div>';
+            }
+            return html;
+        }
+
+        function generatePostItems(count) {
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                html += `
+                    <div class="skeleton-post-item">
+                        <div class="skeleton skeleton-post-featured-image"></div>
+                        <div class="skeleton skeleton-post-title"></div>
+                        <div class="skeleton skeleton-post-meta"></div>
+                        <div class="skeleton-post-excerpt">
+                            <div class="skeleton"></div>
+                            <div class="skeleton"></div>
+                            <div class="skeleton"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function generateCartItems(count) {
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                html += `
+                    <div class="skeleton-cart-item">
+                        <div class="skeleton skeleton-cart-item-image"></div>
+                        <div class="skeleton-cart-item-details">
+                            <div class="skeleton skeleton-cart-item-name"></div>
+                            <div class="skeleton skeleton-cart-item-meta"></div>
+                        </div>
+                        <div class="skeleton skeleton-cart-item-price"></div>
+                        <div class="skeleton skeleton-cart-item-remove"></div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function generateCategoryCards(count) {
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                html += `
+                    <div class="skeleton-category-card">
+                        <div class="skeleton skeleton-category-image"></div>
+                        <div class="skeleton skeleton-category-name"></div>
+                        <div class="skeleton skeleton-category-count"></div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function generateSliderItems(count) {
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                html += `
+                    <div class="skeleton-slider-item">
+                        <div class="skeleton skeleton-slider-image"></div>
+                        <div class="skeleton skeleton-slider-title"></div>
+                        <div class="skeleton skeleton-slider-subtitle"></div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function generateWidgetItems(count) {
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                html += `
+                    <div class="skeleton-widget-item">
+                        <div class="skeleton skeleton-widget-item-image"></div>
+                        <div class="skeleton-widget-item-content">
+                            <div class="skeleton skeleton-widget-item-title"></div>
+                            <div class="skeleton skeleton-widget-item-meta"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+    </script>
+</body>
+</html>

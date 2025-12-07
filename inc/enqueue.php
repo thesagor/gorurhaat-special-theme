@@ -88,3 +88,32 @@ function hello_elementor_child_enqueue_cart_drawer_assets() {
     ));
 }
 add_action( 'wp_enqueue_scripts', 'hello_elementor_child_enqueue_cart_drawer_assets' );
+
+/**
+ * Enqueue Skeleton Screen Assets
+ */
+function hello_elementor_child_enqueue_skeleton_screen() {
+    // Enqueue skeleton screen CSS
+    wp_enqueue_style(
+        'skeleton-screen-css',
+        get_stylesheet_directory_uri() . '/inc/skeleton-screen.css',
+        [],
+        HELLO_ELEMENTOR_CHILD_VERSION
+    );
+    
+    // Enqueue skeleton screen JavaScript
+    wp_enqueue_script(
+        'skeleton-screen-js',
+        get_stylesheet_directory_uri() . '/js/skeleton-screen.js',
+        [ 'jquery' ],
+        HELLO_ELEMENTOR_CHILD_VERSION,
+        true
+    );
+    
+    // Localize script for AJAX
+    wp_localize_script( 'skeleton-screen-js', 'skeletonScreenData', array(
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'nonce' => wp_create_nonce( 'skeleton_nonce' ),
+    ));
+}
+add_action( 'wp_enqueue_scripts', 'hello_elementor_child_enqueue_skeleton_screen' );

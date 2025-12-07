@@ -34,4 +34,5 @@ require_once get_stylesheet_directory() . '/inc/seo-optimization.php'; // SEO wi
 require_once get_stylesheet_directory() . '/inc/image-preloader.php'; // Product image preloader
 require_once get_stylesheet_directory() . '/inc/comment-spam-protection.php'; // Advanced spam protection
 require_once get_stylesheet_directory() . '/inc/spam-protection-admin.php'; // Spam protection admin settings
+require_once get_stylesheet_directory() . '/inc/skeleton-screen.php'; // Skeleton loading screens
 
