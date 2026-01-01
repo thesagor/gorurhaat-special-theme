@@ -24,24 +24,70 @@
          * Handle initial page load
          */
         handlePageLoad: function() {
+            const self = this;
+            
+            // Hide skeleton as soon as DOM is ready
+            $(document).ready(function() {
+                self.checkAndHideSkeleton();
+            });
+            
+            // Also check on window load
             $(window).on('load', function() {
-                // Hide all skeleton containers after page loads
-                setTimeout(function() {
-                    $('.skeleton-container').each(function() {
-                        const $skeleton = $(this);
-                        const $content = $skeleton.next();
-                        
-                        // Fade out skeleton
-                        $skeleton.fadeOut(300, function() {
-                            $(this).remove();
-                        });
-                        
-                        // Fade in actual content
-                        if ($content.length) {
-                            $content.hide().fadeIn(300).addClass('skeleton-fade-in');
-                        }
+                self.checkAndHideSkeleton();
+            });
+            
+            // Check periodically for content (fallback)
+            let checkCount = 0;
+            const checkInterval = setInterval(function() {
+                checkCount++;
+                self.checkAndHideSkeleton();
+                
+                // Stop checking after 5 seconds
+                if (checkCount > 10 || $('.skeleton-container').length === 0) {
+                    clearInterval(checkInterval);
+                }
+            }, 500);
+        },
+        
+        /**
+         * Check if content has loaded and hide skeleton
+         */
+        checkAndHideSkeleton: function() {
+            $('.skeleton-container').each(function() {
+                const $skeleton = $(this);
+                const skeletonType = $skeleton.data('skeleton');
+                let hasContent = false;
+                
+                // Check for content based on skeleton type
+                if (skeletonType === 'single-product') {
+                    // Check if product images or content exists
+                    hasContent = $('.woocommerce-product-gallery').length > 0 || 
+                                 $('.product_title').length > 0 ||
+                                 $('.summary').length > 0 ||
+                                 $('img.wp-post-image').length > 0;
+                } else if (skeletonType === 'product-grid') {
+                    // Check if products exist
+                    hasContent = $('.products li.product').length > 0 ||
+                                 $('.product').length > 0;
+                } else if (skeletonType === 'post-list') {
+                    // Check if posts exist
+                    hasContent = $('.post').length > 0 ||
+                                 $('article').length > 0;
+                } else if (skeletonType === 'cart') {
+                    // Check if cart items exist
+                    hasContent = $('.cart_item').length > 0;
+                } else {
+                    // Generic check - if any content exists after skeleton
+                    hasContent = $skeleton.next().length > 0 && 
+                                 $skeleton.next().children().length > 0;
+                }
+                
+                // If content exists, hide skeleton
+                if (hasContent) {
+                    $skeleton.fadeOut(200, function() {
+                        $(this).remove();
                     });
-                }, 100);
+                }
             });
         },
 

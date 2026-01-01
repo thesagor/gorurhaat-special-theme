@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Food Slider - All in One</title>
+
+    <!-- Swiper CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: #000;
+        color: #fff;
+        overflow: hidden;
+      }
+
+      .hero-slider {
+        position: relative;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      /* Background Slider */
+      .as-slider-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+      }
+
+      .as-slider-background img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transform: scale(1.1);
+        transition: all 1s ease-in-out;
+      }
+
+      .as-slider-background img.currentForward,
+      .as-slider-background img.currentBackward {
+        opacity: 1;
+        transform: scale(1);
+        z-index: 1;
+      }
+
+      .as-slider-background img.prev {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        height: 100%;
+        width: 100%;
+        padding: 5%;
+        gap: 5%;
+      }
+
+      /* LEFT SECTION */
+      .hero-left {
+        width: 45%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+      }
+
+      .as-bar {
+        position: absolute;
+        left: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        align-items: center;
+        height: auto;
+        max-height: 500px;
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+        z-index: 10;
+        padding: 30px 0;
+      }
+
+      .as-bar::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        top: 0;
+        z-index: 0;
+      }
+
+      .hero-slider.loaded .as-bar {
+        opacity: 1;
+      }
+
+      .dot {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      .dot:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.7);
+        transform: scale(1.05);
+      }
+
+      .dot.active {
+        background: rgba(231, 76, 60, 0.9);
+        border-color: rgba(231, 76, 60, 1);
+        transform: scale(1.1);
+      }
+
+      .dot-number {
+        font-size: 14px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        transition: all 0.3s ease-in-out;
+      }
+
+      .dot.active .dot-number {
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .text-container {
+        margin-left: 100px;
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+      }
+
+      .hero-slider.loaded .text-container {
+        opacity: 1;
+      }
+
+      .changing-widget {
+        overflow: hidden;
+        position: relative;
+        transition: height 0.3s ease-in-out;
+        min-height: 100px;
+      }
+
+      .title-item,
+      .desc-item {
+        position: relative;
+        width: 100%;
+        display: none;
+      }
+
+      .title-item.active,
+      .desc-item.active {
+        display: block;
+      }
+
+      .title-item h1 {
+        font-size: 36px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #fff;
+      }
+
+      .desc-item p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #fff;
+        margin-bottom: 30px;
+        max-width: 500px;
+      }
+
+      .button-widget {
+        overflow: hidden;
+        position: relative;
+        transition: height 0.3s ease-in-out;
+        min-height: 50px;
+      }
+
+      .button-widget .btn {
+        display: inline-block;
+        background: #eee;
+        color: #000;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-right: 15px;
+      }
+
+      .button-widget .btn:hover {
+        background: #fff;
+        transform: translateY(-2px);
+      }
+
+      /* RIGHT SECTION */
+      .hero-right {
+        width: 55%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        opacity: 0;
+        transform: translateX(100px);
+        transition: all 0.8s ease-in-out;
+      }
+
+      .hero-slider.loaded .hero-right {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .food-slider {
+        width: 100%;
+        max-width: 1400px;
+        height: auto;
+      }
+
+      .food-slider .swiper-wrapper {
+        display: flex;
+        align-items: center;
+        height: 320px;
+        padding: 0 20px;
+      }
+
+      .swiper-slide {
+        width: 280px;
+        height: 210px;
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+        transition: all 0.3s ease-in-out;
+        display: flex;
+        align-items: flex-end;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.15);
+        flex-shrink: 0;
+        cursor: pointer;
+      }
+
+      .swiper-slide.swiper-slide-active {
+        width: 360px;
+        height: 270px;
+      }
+
+      .swiper-slide img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .swiper-slide img:hover {
+        transform: scale(1.05);
+      }
+
+      .swiper-slide::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          20deg,
+          rgba(0, 0, 0, 0.75) 0%,
+          rgba(0, 0, 0, 0) 100%
+        );
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .swiper-slide span {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        font-weight: 700;
+        z-index: 2;
+        color: #fff;
+        font-size: 14px;
+        pointer-events: none;
+      }
+
+      /* Navigation Buttons */
+      .nav-buttons {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        opacity: 0;
+        transition: opacity 0.8s ease-in-out;
+        z-index: 10;
+      }
+
+      .hero-slider.loaded .nav-buttons {
+        opacity: 1;
+      }
+
+      .nav-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(231, 76, 60, 0.9);
+        color: #fff;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        z-index: 3;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .nav-btn:hover {
+        background: rgba(192, 57, 43, 1);
+        transform: scale(1.1);
+        border-color: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      .nav-btn i {
+        pointer-events: none;
+        display: inline-block !important;
+        line-height: 1;
+        font-size: 18px;
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .hero-content {
+          flex-direction: column;
+        }
+
+        .hero-left,
+        .hero-right {
+          width: 100%;
+        }
+
+        .swiper-slide {
+          width: 200px;
+          height: 150px;
+        }
+
+        .swiper-slide.swiper-slide-active {
+          width: 260px;
+          height: 195px;
+        }
+
+        .title-item h1 {
+          font-size: 28px;
+        }
+
+        .desc-item p {
+          font-size: 12px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero-content {
+          flex-direction: column;
+          padding: 20px;
+        }
+
+        .hero-left,
+        .hero-right {
+          width: 100%;
+        }
+
+        .as-bar {
+          display: none;
+        }
+
+        .text-container {
+          margin-left: 0;
+        }
+
+        .title-item h1 {
+          font-size: 24px;
+        }
+
+        .swiper-slide {
+          width: 160px;
+          height: 120px;
+        }
+
+        .swiper-slide.swiper-slide-active {
+          width: 200px;
+          height: 150px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero-slider">
+      <!-- Background Slider -->
+      <div class="as-slider-background"></div>
+
+      <!-- Overlay -->
+      <div class="hero-overlay"></div>
+
+      <!-- Main Content -->
+      <div class="hero-content">
+        <!-- Left Section - Text and Navigation -->
+        <div class="hero-left">
+          <!-- Navigation Dots -->
+          <div class="as-bar"></div>
+
+          <!-- Text Content -->
+          <div class="text-container">
+            <div class="changing-widget titles-widget">
+              <div class="title-item">
+                <h1>The Art of making Pizza</h1>
+              </div>
+              <div class="title-item">
+                <h1>The Perfect Burger</h1>
+              </div>
+              <div class="title-item">
+                <h1>The Elegance of Sushi</h1>
+              </div>
+              <div class="title-item">
+                <h1>Journey Through Tacos</h1>
+              </div>
+              <div class="title-item">
+                <h1>Pasta: A loving Staple</h1>
+              </div>
+            </div>
+
+            <div class="changing-widget desc-widget">
+              <div class="desc-item">
+                <p>
+                  Explore the rich history and diverse styles of pizzas from
+                  around the world. From the classic Margherita of Naples to the
+                  Chicago deep-dish, discover what makes each type unique. Learn
+                  about the ingredients, techniques, and cultural significance
+                  that have made pizza a beloved dish globally.
+                </p>
+              </div>
+              <div class="desc-item">
+                <p>
+                  Dive into the world of burgers, where creativity meets
+                  tradition. Uncover the secrets behind the juiciest patties,
+                  the fluffiest buns, and the most delicious toppings. Whether
+                  it's the American cheeseburger, the Japanese Wagyu burger, or
+                  the vegetarian delight, find out what makes a burger truly
+                  exceptional.
+                </p>
+              </div>
+              <div class="desc-item">
+                <p>
+                  Sushi is more than just a meal; it's an art form. Trace the
+                  origins of sushi from ancient Japan to its modern-day
+                  variations. Understand the importance of fresh ingredients,
+                  the precision of sushi chefs, and the cultural rituals
+                  associated with sushi dining. Experience the delicate balance
+                  of flavors and textures that define this iconic dish.
+                </p>
+              </div>
+              <div class="desc-item">
+                <p>
+                  Tacos offer a taste of Mexico's vibrant culinary tradition.
+                  Discover the different types of tacos, from the traditional
+                  street-style tacos to innovative gourmet versions. Learn about
+                  the various fillings, salsas, and tortillas that create an
+                  explosion of flavors in every bite.
+                </p>
+              </div>
+              <div class="desc-item">
+                <p>
+                  Pasta is a versatile and beloved staple in many cuisines.
+                  Explore the myriad shapes, sauces, and recipes that make pasta
+                  a favorite around the world. From the simplicity of Aglio e
+                  Olio to the richness of Carbonara, understand how pasta has
+                  evolved and adapted across cultures.
+                </p>
+              </div>
+            </div>
+
+            <div class="changing-widget button-widget">
+              <a href="#" class="btn">EXPLORE MORE</a>
+              <a href="#" class="btn">EXPLORE MORE</a>
+              <a href="#" class="btn">EXPLORE MORE</a>
+              <a href="#" class="btn">EXPLORE MORE</a>
+              <a href="#" class="btn">EXPLORE MORE</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Section - Image Carousel -->
+        <div class="hero-right">
+          <div class="swiper food-slider">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" data-index="0">
+                <img
+                  src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500&h=400&fit=crop"
+                  alt="Pizza"
+                />
+                <span>PIZZA</span>
+              </div>
+              <div class="swiper-slide" data-index="1">
+                <img
+                  src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&h=400&fit=crop"
+                  alt="Burger"
+                />
+                <span>BURGER</span>
+              </div>
+              <div class="swiper-slide" data-index="2">
+                <img
+                  src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=500&h=400&fit=crop"
+                  alt="Sushi"
+                />
+                <span>SUSHI</span>
+              </div>
+              <div class="swiper-slide" data-index="3">
+                <img
+                  src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500&h=400&fit=crop"
+                  alt="Tacos"
+                />
+                <span>TACOS</span>
+              </div>
+              <div class="swiper-slide" data-index="4">
+                <img
+                  src="https://images.unsplash.com/photo-1621996346565-431f63602f41?w=500&h=400&fit=crop"
+                  alt="Pasta"
+                />
+                <span>PASTA</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="nav-buttons">
+            <button class="nav-btn nav-prev">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn nav-next">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+      var $ = jQuery;
+
+      $(document).ready(function () {
+        const bgImages = [
+          "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=1200&h=800&fit=crop",
+          "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1200&h=800&fit=crop",
+          "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=1200&h=800&fit=crop",
+          "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=1200&h=800&fit=crop",
+          "https://images.unsplash.com/photo-1621996346565-431f63602f41?w=1200&h=800&fit=crop",
+        ];
+
+        let currentSlide = 0;
+        let previousSlide = 0;
+        let forward = true;
+        let swiper;
+
+        // Create background images
+        const bgHTML = bgImages.map((url) => `<img src="${url}"/>`).join("");
+        $(".as-slider-background").html(bgHTML);
+
+        // Set first image as active
+        $(".as-slider-background img").eq(0).addClass("currentForward");
+
+        // Create navigation dots
+        let dotsHTML = "";
+        for (let i = 0; i < 5; i++) {
+          dotsHTML += `<span class="dot${
+            i === 0 ? " active" : ""
+          }"><span class="dot-number">${i + 1}</span></span>`;
+        }
+        $(".as-bar").append(dotsHTML);
+
+        // Initialize Swiper with proper settings
+        swiper = new Swiper(".food-slider", {
+          slidesPerView: 5,
+          spaceBetween: 30,
+          centeredSlides: true,
+          loop: false,
+          navigation: {
+            nextEl: ".nav-next",
+            prevEl: ".nav-prev",
+          },
+          on: {
+            slideChange: function () {
+              const activeIndex = this.activeIndex;
+              updateSlide(activeIndex);
+            },
+            init: function () {
+              updateSlide(0);
+            },
+          },
+          breakpoints: {
+            0: { slidesPerView: 1.3, spaceBetween: 15 },
+            768: { slidesPerView: 3, spaceBetween: 20 },
+            1024: { slidesPerView: 5, spaceBetween: 30 },
+          },
+        });
+
+        function updateSlide(index) {
+          currentSlide = index;
+
+          // Update background image
+          updateBackgroundImage();
+
+          // Update text content
+          updateTextContent(index);
+
+          // Update dots
+          updateDots(index);
+
+          previousSlide = currentSlide;
+        }
+
+        function updateBackgroundImage() {
+          const images = $(".as-slider-background img");
+
+          images.removeClass("currentForward currentBackward prev");
+
+          if (previousSlide < currentSlide) {
+            forward = true;
+          } else if (previousSlide > currentSlide) {
+            forward = false;
+          }
+
+          images.eq(previousSlide).addClass("prev");
+
+          if (forward) {
+            images.eq(currentSlide).addClass("currentForward");
+          } else {
+            images.eq(currentSlide).addClass("currentBackward");
+          }
+        }
+
+        function updateTextContent(index) {
+          const titleItems = $(".titles-widget .title-item");
+          const descItems = $(".desc-widget .desc-item");
+          const btnItems = $(".button-widget .btn");
+
+          // Remove active class from all items
+          titleItems.removeClass("active").hide();
+          descItems.removeClass("active").hide();
+          btnItems.hide();
+
+          // Add active class and show current item
+          titleItems.eq(index).addClass("active").show();
+          descItems.eq(index).addClass("active").show();
+          btnItems.eq(index).show();
+
+          const titleHeight = titleItems.eq(index).outerHeight(true);
+          const descHeight = descItems.eq(index).outerHeight(true);
+          const btnHeight = btnItems.eq(index).outerHeight(true);
+
+          $(".titles-widget").css("height", titleHeight + "px");
+          $(".desc-widget").css("height", descHeight + "px");
+          $(".button-widget").css("height", btnHeight + "px");
+        }
+
+        function updateDots(index) {
+          $(".dot").removeClass("active");
+          $(".dot").eq(index).addClass("active");
+        }
+
+        // Dot click event
+        $(document).on("click", ".dot", function () {
+          const index = $(this).index(".dot");
+          swiper.slideTo(index);
+        });
+
+        // Image click event - Make images clickable
+        $(document).on("click", ".swiper-slide", function (e) {
+          const slideIndex = $(this).attr("data-index");
+          if (slideIndex !== undefined) {
+            swiper.slideTo(parseInt(slideIndex));
+          }
+        });
+
+        // Set initial content height
+        updateTextContent(0);
+
+        // Add loaded class after delay
+        setTimeout(function () {
+          $(".hero-slider").addClass("loaded");
+        }, 300);
+      });
+    </script>
+  </body>
+</html>

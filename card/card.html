@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Cattle Marketplace</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="../lib/swiper-bundle.min.css"/>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f8fafb 0%, #e9f0f5 100%);
+            padding: 60px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-wrapper::before {
+            content: '🔍';
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            opacity: 0.5;
+        }
+
+        .section-header input {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            color: #1a1a2e;
+        }
+
+        .section-header input::placeholder {
+            color: #94a3b8;
+        }
+
+        .section-header input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .see-more {
+            padding: 14px 32px;
+            border: 2px solid #e2e8f0;
+            background: #ffffff;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+            color: #1a1a2e;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .see-more:hover {
+            background: #1a1a2e;
+            color: #ffffff;
+            border-color: #1a1a2e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26, 26, 46, 0.15);
+        }
+
+        .swiper {
+            padding: 30px 0 60px 0;
+        }
+
+        .swiper-slide {
+            height: auto;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 0;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #f1f5f9;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #10b981);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            border-color: #e0e7ff;
+        }
+
+        .card-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 24px;
+        }
+
+        .card img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 12px;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.08);
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .card-content {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .cattle-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .cattle-breed {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            background: #f1f5f9;
+            transform: translateY(-2px);
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a1a2e;
+            letter-spacing: -0.3px;
+        }
+
+        .price-value {
+            color: #dc2626;
+        }
+
+        .weight-value {
+            color: #10b981;
+        }
+
+        .details-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+            margin-top: auto;
+        }
+
+        .details-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+        }
+
+        .details-btn:active {
+            transform: translateY(0);
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            background: #ffffff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border: 2px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+            box-shadow: 0 12px 32px rgba(37, 99, 235, 0.3);
+        }
+
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 20px;
+            font-weight: 900;
+            color: #1a1a2e;
+            transition: color 0.3s ease;
+        }
+
+        .swiper-button-next:hover:after,
+        .swiper-button-prev:hover:after {
+            color: #ffffff;
+        }
+
+        .swiper-pagination-bullet {
+            width: 12px;
+            height: 12px;
+            background: #cbd5e1;
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: #2563eb;
+            width: 32px;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 30px 16px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .section-subtitle {
+                font-size: 14px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-wrapper {
+                max-width: 100%;
+            }
+
+            .see-more {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .cattle-name {
+                font-size: 16px;
+            }
+
+            .info-value {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="section-header">
+
+        <button class="see-more">
+            Friesian cow
+            <span>→</span>
+        </button>
+
+        <button class="see-more">
+            View All Cattle
+            <span>→</span>
+        </button>
+    </div>
+
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="card">
+                    <div class="card-image-wrapper">
+                        <span class="badge">Premium</span>
+                        <img src="https://i.ibb.co/4Kqjv9c/cow.png" alt="Holstein Cattle">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="cattle-name">Holstein Friesian</h3>
+                        <p class="cattle-breed">Dairy Breed</p>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-value price-value">$2,500</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-value weight-value">450 kg</div>
+                            </div>
+                        </div>
+                        <button class="details-btn">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="card">
+                    <div class="card-image-wrapper">
+                        <span class="badge">Featured</span>
+                        <img src="https://i.ibb.co/4Kqjv9c/cow.png" alt="Jersey Cattle">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="cattle-name">Jersey Cow</h3>
+                        <p class="cattle-breed">Dairy Breed</p>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-value price-value">$2,200</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-value weight-value">380 kg</div>
+                            </div>
+                        </div>
+                        <button class="details-btn">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="card">
+                    <div class="card-image-wrapper">
+                        <span class="badge">Premium</span>
+                        <img src="https://i.ibb.co/4Kqjv9c/cow.png" alt="Angus Cattle">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="cattle-name">Angus Bull</h3>
+                        <p class="cattle-breed">Beef Breed</p>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-value price-value">$3,200</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-value weight-value">550 kg</div>
+                            </div>
+                        </div>
+                        <button class="details-btn">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="card">
+                    <div class="card-image-wrapper">
+                        <span class="badge">Featured</span>
+                        <img src="https://i.ibb.co/4Kqjv9c/cow.png" alt="Brahman Cattle">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="cattle-name">Brahman Cow</h3>
+                        <p class="cattle-breed">Dual Purpose</p>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-value price-value">$2,800</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-value weight-value">480 kg</div>
+                            </div>
+                        </div>
+                        <button class="details-btn">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="card">
+                    <div class="card-image-wrapper">
+                        <span class="badge">Premium</span>
+                        <img src="https://i.ibb.co/4Kqjv9c/cow.png" alt="Hereford Cattle">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="cattle-name">Hereford Bull</h3>
+                        <p class="cattle-breed">Beef Breed</p>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-value price-value">$2,950</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-value weight-value">520 kg</div>
+                            </div>
+                        </div>
+                        <button class="details-btn">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
+
+<script src="../lib/swiper-bundle.min.js"></script>
+<script>
+    new Swiper('.swiper', {
+        slidesPerView: 4,
+        spaceBetween: 30,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+        },
+        loop: true,
+        speed: 600,
+        breakpoints: {
+            0: { slidesPerView: 1, spaceBetween: 20 },
+            640: { slidesPerView: 2, spaceBetween: 20 },
+            1024: { slidesPerView: 3, spaceBetween: 24 },
+            1400: { slidesPerView: 4, spaceBetween: 30 }
+        }
+    });
+</script>
+</body>
+</html>

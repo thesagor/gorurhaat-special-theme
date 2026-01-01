@@ -1,0 +1,229 @@
+/**
+ * Cattle Slider Widget Styles
+ * 
+ * Premium card design for cattle/livestock products
+ * Based on card.html design
+ * 
+ * @package HelloElementorChild
+ */
+
+.cattle-slider-wrapper {
+    padding: 30px 0 60px 0;
+}
+
+.cattle-card {
+    background: #ffffff;
+    padding: 0;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    position: relative;
+}
+
+.cattle-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #2563eb, #10b981);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cattle-card:hover::before {
+    opacity: 1;
+}
+
+.cattle-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    border-color: #e0e7ff;
+}
+
+.card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 12px;
+}
+
+.cattle-card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.4s ease;
+}
+
+.cattle-card:hover img {
+    transform: scale(1.08);
+}
+
+.cattle-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff !important;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.card-content {
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.cattle-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+}
+
+.cattle-breed {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.info-item {
+    background: #f8fafc;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.info-item:hover {
+    background: #f1f5f9;
+    transform: translateY(-2px);
+}
+
+.info-label {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1a1a2e;
+    letter-spacing: -0.3px;
+}
+
+.price-value {
+    color: #dc2626;
+}
+
+.weight-value {
+    color: #10b981;
+}
+
+.details-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 15px;
+    color: #ffffff !important;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+    margin-top: auto;
+}
+
+.details-btn:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+}
+
+.details-btn:active {
+    transform: translateY(0);
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    background: #ffffff;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border: 2px solid #f1f5f9;
+    transition: all 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    box-shadow: 0 12px 32px rgba(37, 99, 235, 0.3);
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 20px;
+    font-weight: 900;
+    color: #1a1a2e;
+    transition: color 0.3s ease;
+}
+
+.swiper-button-next:hover:after,
+.swiper-button-prev:hover:after {
+    color: #ffffff;
+}
+
+.swiper-pagination {
+    position: relative !important;
+    bottom: auto !important;
+    margin-top: 30px !important;
+    text-align: center;
+    width: 100%;
+}
+
+.swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    background: #cbd5e1;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+    background: #2563eb;
+    width: 32px;
+    border-radius: 6px;
+}

@@ -132,6 +132,12 @@ function gorurhaat_preloader_styles() {
         transition: opacity 0.3s ease;
     }
     
+    .has-preloader.loaded {
+        background-color: transparent !important;
+        background-image: none !important;
+        min-height: 0;
+    }
+    
     .has-preloader.loaded img {
         opacity: 1;
     }

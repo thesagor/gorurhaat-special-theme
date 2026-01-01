@@ -35,4 +35,5 @@ require_once get_stylesheet_directory() . '/inc/image-preloader.php'; // Product
 require_once get_stylesheet_directory() . '/inc/comment-spam-protection.php'; // Advanced spam protection
 require_once get_stylesheet_directory() . '/inc/spam-protection-admin.php'; // Spam protection admin settings
 require_once get_stylesheet_directory() . '/inc/skeleton-screen.php'; // Skeleton loading screens
+require_once get_stylesheet_directory() . '/inc/cattle-custom-fields.php'; // Cattle product custom fields
 

@@ -6,10 +6,18 @@ function hello_elementor_child_register_elementor_widgets( $widgets_manager ) {
     // Include widget files
     require_once( get_stylesheet_directory() . '/widgets/product-grid-widget.php' );
     require_once( get_stylesheet_directory() . '/widgets/product-slider-widget.php' );
+    require_once( get_stylesheet_directory() . '/widgets/cattle-slider-widget.php' );
+    require_once( get_stylesheet_directory() . '/widgets/hero-slider-widget.php' );
+
+
 
     // Register widgets
     $widgets_manager->register( new \Hello_Elementor_Product_Grid_Widget() );
     $widgets_manager->register( new \Hello_Elementor_Product_Slider_Widget() );
+    $widgets_manager->register( new \Hello_Elementor_Cattle_Slider_Widget() );
+    $widgets_manager->register( new \Hello_Elementor_Hero_Slider_Widget() );
+
+
 }
 add_action( 'elementor/widgets/register', 'hello_elementor_child_register_elementor_widgets' );
 
