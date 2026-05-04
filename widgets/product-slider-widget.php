@@ -49,7 +49,7 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
      * @return array Widget categories.
      */
     public function get_categories() {
-        return [ 'woocommerce-elements' ];
+        return [ 'gorurhaat' ];
     }
 
     /**
@@ -67,7 +67,7 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
      * @return array Widget scripts dependencies.
      */
     public function get_script_depends() {
-        return [ 'swiper' ];
+        return [ 'jquery', 'swiper' ];
     }
 
     /**
@@ -120,6 +120,23 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
                     'feed' => __( 'Animal Feed', 'hello-elementor-child' ),
                 ],
                 'default' => '',
+            ]
+        );
+
+        // Cow Breed Selection (Livestock specific)
+        $this->add_control(
+            'cow_breed',
+            [
+                'label' => __( 'Cow Breed', 'hello-elementor-child' ),
+                'type' => \Elementor\Controls_Manager::SELECT2,
+                'multiple' => true,
+                'options' => $this->get_cow_breeds(),
+                'default' => [],
+                'label_block' => true,
+                'description' => __( 'Select cow breeds to filter livestock products. Leave empty to show all breeds.', 'hello-elementor-child' ),
+                'condition' => [
+                    'product_type' => 'livestock',
+                ],
             ]
         );
 
@@ -193,7 +210,7 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
         );
 
         // Slides to Scroll
-        $this->add_control(
+        $this->add_responsive_control(
             'slides_to_scroll',
             [
                 'label' => __( 'Slides to Scroll', 'hello-elementor-child' ),
@@ -691,6 +708,38 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
     }
 
     /**
+     * Get available cow breeds from product meta
+     *
+     * @return array
+     */
+    protected function get_cow_breeds() {
+        global $wpdb;
+        
+        // Get unique cow breeds from post meta
+        $breeds = $wpdb->get_results( "
+            SELECT DISTINCT pm.meta_value
+            FROM {$wpdb->postmeta} pm
+            INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+            WHERE pm.meta_key = '_cow_breed'
+            AND pm.meta_value != ''
+            AND p.post_type = 'product'
+            AND p.post_status = 'publish'
+            ORDER BY pm.meta_value ASC
+        " );
+        
+        $options = [];
+        if ( ! empty( $breeds ) ) {
+            foreach ( $breeds as $breed ) {
+                if ( ! empty( $breed->meta_value ) ) {
+                    $options[ $breed->meta_value ] = $breed->meta_value;
+                }
+            }
+        }
+        
+        return $options;
+    }
+
+    /**
      * Render widget output on the frontend.
      */
     protected function render() {
@@ -720,6 +769,15 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
                 'key' => '_product_info_type',
                 'value' => $settings['product_type'],
                 'compare' => '=',
+            ];
+        }
+
+        // Add cow breed filter (livestock specific)
+        if ( ! empty( $settings['cow_breed'] ) ) {
+            $args['meta_query'][] = [
+                'key' => '_cow_breed',
+                'value' => $settings['cow_breed'],
+                'compare' => 'IN',
             ];
         }
 
@@ -775,44 +833,69 @@ class Hello_Elementor_Product_Slider_Widget extends \Elementor\Widget_Base {
 
             <script>
             jQuery(document).ready(function($) {
-                new Swiper('.<?php echo esc_js( $slider_id ); ?>', {
-                    slidesPerView: <?php echo esc_js( $settings['slides_to_show_mobile'] ?? 1 ); ?>,
-                    slidesPerGroup: <?php echo esc_js( $settings['slides_to_scroll'] ); ?>,
-                    spaceBetween: <?php echo esc_js( $settings['space_between']['size'] ?? 20 ); ?>,
-                    speed: <?php echo esc_js( $settings['speed'] ); ?>,
-                    loop: <?php echo $settings['infinite'] === 'yes' ? 'true' : 'false'; ?>,
-                    <?php if ( $settings['autoplay'] === 'yes' ) : ?>
-                    autoplay: {
-                        delay: <?php echo esc_js( $settings['autoplay_speed'] ); ?>,
-                        disableOnInteraction: false,
-                        <?php if ( $settings['pause_on_hover'] === 'yes' ) : ?>
-                        pauseOnMouseEnter: true,
-                        <?php endif; ?>
-                    },
-                    <?php endif; ?>
-                    <?php if ( $settings['show_arrows'] === 'yes' ) : ?>
-                    navigation: {
-                        nextEl: '.<?php echo esc_js( $slider_id ); ?> .swiper-button-next',
-                        prevEl: '.<?php echo esc_js( $slider_id ); ?> .swiper-button-prev',
-                    },
-                    <?php endif; ?>
-                    <?php if ( $settings['show_dots'] === 'yes' ) : ?>
-                    pagination: {
-                        el: '.<?php echo esc_js( $slider_id ); ?> .swiper-pagination',
-                        clickable: true,
-                    },
-                    <?php endif; ?>
-                    breakpoints: {
-                        768: {
-                            slidesPerView: <?php echo esc_js( $settings['slides_to_show_tablet'] ?? 2 ); ?>,
-                            spaceBetween: <?php echo esc_js( $settings['space_between_tablet']['size'] ?? $settings['space_between']['size'] ?? 20 ); ?>,
-                        },
-                        1024: {
-                            slidesPerView: <?php echo esc_js( $settings['slides_to_show'] ?? 3 ); ?>,
-                            spaceBetween: <?php echo esc_js( $settings['space_between']['size'] ?? 20 ); ?>,
-                        }
+                var swiperInstance = null;
+                var initSlider = function() {
+                    if (typeof Swiper === 'undefined') {
+                        setTimeout(initSlider, 100);
+                        return;
                     }
-                });
+                    
+                    // Destroy existing instance to prevent cumulative shifting
+                    if (swiperInstance) {
+                        swiperInstance.destroy(true, true);
+                    }
+                    
+                    var spaceBetween = <?php echo isset( $settings['space_between']['size'] ) ? esc_js( $settings['space_between']['size'] ) : '20'; ?>;
+                    var spaceBetweenTablet = <?php echo isset( $settings['space_between_tablet']['size'] ) ? esc_js( $settings['space_between_tablet']['size'] ) : 'spaceBetween'; ?>;
+                    var spaceBetweenMobile = <?php echo isset( $settings['space_between_mobile']['size'] ) ? esc_js( $settings['space_between_mobile']['size'] ) : 'spaceBetween'; ?>;
+                    
+                    swiperInstance = new Swiper('.<?php echo esc_js( $slider_id ); ?>', {
+                        slidesPerView: <?php echo esc_js( $settings['slides_to_show_mobile'] ?? 1 ); ?>,
+                        slidesPerGroup: <?php echo esc_js( $settings['slides_to_scroll_mobile'] ?? $settings['slides_to_scroll'] ?? 1 ); ?>,
+                        spaceBetween: spaceBetween,
+                        speed: <?php echo esc_js( $settings['speed'] ); ?>,
+                        loop: <?php echo $settings['infinite'] === 'yes' ? 'true' : 'false'; ?>,
+                        <?php if ( $settings['autoplay'] === 'yes' ) : ?>
+                        autoplay: {
+                            delay: <?php echo esc_js( $settings['autoplay_speed'] ); ?>,
+                            disableOnInteraction: false,
+                            <?php if ( $settings['pause_on_hover'] === 'yes' ) : ?>
+                            pauseOnMouseEnter: true,
+                            <?php endif; ?>
+                        },
+                        <?php endif; ?>
+                        <?php if ( $settings['show_arrows'] === 'yes' ) : ?>
+                        navigation: {
+                            nextEl: '.<?php echo esc_js( $slider_id ); ?> .swiper-button-next',
+                            prevEl: '.<?php echo esc_js( $slider_id ); ?> .swiper-button-prev',
+                        },
+                        <?php endif; ?>
+                        <?php if ( $settings['show_dots'] === 'yes' ) : ?>
+                        pagination: {
+                            el: '.<?php echo esc_js( $slider_id ); ?> .swiper-pagination',
+                            clickable: true,
+                        },
+                        <?php endif; ?>
+                        breakpoints: {
+                            0: {
+                                slidesPerView: <?php echo esc_js( $settings['slides_to_show_mobile'] ?? 1 ); ?>,
+                                slidesPerGroup: <?php echo esc_js( $settings['slides_to_scroll_mobile'] ?? $settings['slides_to_scroll'] ?? 1 ); ?>,
+                                spaceBetween: spaceBetweenMobile,
+                            },
+                            768: {
+                                slidesPerView: <?php echo esc_js( $settings['slides_to_show_tablet'] ?? 2 ); ?>,
+                                slidesPerGroup: <?php echo esc_js( $settings['slides_to_scroll_tablet'] ?? $settings['slides_to_scroll'] ?? 1 ); ?>,
+                                spaceBetween: spaceBetweenTablet,
+                            },
+                            1024: {
+                                slidesPerView: <?php echo esc_js( $settings['slides_to_show'] ?? 3 ); ?>,
+                                slidesPerGroup: <?php echo esc_js( $settings['slides_to_scroll'] ?? 1 ); ?>,
+                                spaceBetween: spaceBetween,
+                            }
+                        }
+                    });
+                };
+                initSlider();
             });
             </script>
             <?php

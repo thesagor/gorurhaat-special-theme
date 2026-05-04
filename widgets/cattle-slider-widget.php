@@ -50,7 +50,7 @@ class Hello_Elementor_Cattle_Slider_Widget extends \Elementor\Widget_Base {
      * @return array Widget categories.
      */
     public function get_categories() {
-        return [ 'woocommerce-elements' ];
+        return [ 'gorurhaat' ];
     }
 
     /**
@@ -68,7 +68,7 @@ class Hello_Elementor_Cattle_Slider_Widget extends \Elementor\Widget_Base {
      * @return array Widget scripts dependencies.
      */
     public function get_script_depends() {
-        return [ 'swiper' ];
+        return [ 'jquery', 'swiper' ];
     }
 
     /**
@@ -627,47 +627,55 @@ class Hello_Elementor_Cattle_Slider_Widget extends \Elementor\Widget_Base {
 
             <script>
             jQuery(document).ready(function($) {
-                new Swiper('.<?php echo esc_js( $slider_id ); ?>', {
-                    slidesPerView: <?php echo esc_js( $settings['slides_to_show_mobile'] ?? 1 ); ?>,
-                    spaceBetween: <?php echo esc_js( $settings['space_between']['size'] ?? 15 ); ?>,
-                    speed: <?php echo esc_js( $settings['speed'] ); ?>,
-                    loop: <?php echo $settings['infinite'] === 'yes' ? 'true' : 'false'; ?>,
-                    <?php if ( $settings['autoplay'] === 'yes' ) : ?>
-                    autoplay: {
-                        delay: <?php echo esc_js( $settings['autoplay_speed'] ); ?>,
-                        disableOnInteraction: false,
-                        <?php if ( $settings['pause_on_hover'] === 'yes' ) : ?>
-                        pauseOnMouseEnter: true,
-                        <?php endif; ?>
-                    },
-                    <?php endif; ?>
-                    <?php if ( $settings['show_arrows'] === 'yes' ) : ?>
-                    navigation: {
-                        nextEl: '.<?php echo esc_js( $slider_id ); ?> .swiper-button-next',
-                        prevEl: '.<?php echo esc_js( $slider_id ); ?> .swiper-button-prev',
-                    },
-                    <?php endif; ?>
-                    <?php if ( $settings['show_dots'] === 'yes' ) : ?>
-                    pagination: {
-                        el: '.<?php echo esc_js( $slider_id ); ?>-pagination',
-                        clickable: true,
-                    },
-                    <?php endif; ?>
-                    breakpoints: {
-                        640: {
-                            slidesPerView: 2,
-                            spaceBetween: 10,
-                        },
-                        1024: {
-                            slidesPerView: <?php echo esc_js( $settings['slides_to_show_tablet'] ?? 2 ); ?>,
-                            spaceBetween: 12,
-                        },
-                        1400: {
-                            slidesPerView: <?php echo esc_js( $settings['slides_to_show'] ?? 4 ); ?>,
-                            spaceBetween: <?php echo esc_js( $settings['space_between']['size'] ?? 15 ); ?>,
-                        }
+                var initCattleSlider = function() {
+                    if (typeof Swiper === 'undefined') {
+                        setTimeout(initCattleSlider, 100);
+                        return;
                     }
-                });
+                    
+                    var spaceBetween = <?php echo isset( $settings['space_between']['size'] ) ? esc_js( $settings['space_between']['size'] ) : '15'; ?>;
+                    var spaceBetweenTablet = <?php echo isset( $settings['space_between_tablet']['size'] ) ? esc_js( $settings['space_between_tablet']['size'] ) : 'spaceBetween'; ?>;
+                    var spaceBetweenMobile = <?php echo isset( $settings['space_between_mobile']['size'] ) ? esc_js( $settings['space_between_mobile']['size'] ) : 'spaceBetween'; ?>;
+                    
+                    new Swiper('.<?php echo esc_js( $slider_id ); ?>', {
+                        slidesPerView: <?php echo esc_js( $settings['slides_to_show_mobile'] ?? 1 ); ?>,
+                        spaceBetween: spaceBetweenMobile,
+                        speed: <?php echo esc_js( $settings['speed'] ); ?>,
+                        loop: <?php echo $settings['infinite'] === 'yes' ? 'true' : 'false'; ?>,
+                        <?php if ( $settings['autoplay'] === 'yes' ) : ?>
+                        autoplay: {
+                            delay: <?php echo esc_js( $settings['autoplay_speed'] ); ?>,
+                            disableOnInteraction: false,
+                            <?php if ( $settings['pause_on_hover'] === 'yes' ) : ?>
+                            pauseOnMouseEnter: true,
+                            <?php endif; ?>
+                        },
+                        <?php endif; ?>
+                        <?php if ( $settings['show_arrows'] === 'yes' ) : ?>
+                        navigation: {
+                            nextEl: '.<?php echo esc_js( $slider_id ); ?> .swiper-button-next',
+                            prevEl: '.<?php echo esc_js( $slider_id ); ?> .swiper-button-prev',
+                        },
+                        <?php endif; ?>
+                        <?php if ( $settings['show_dots'] === 'yes' ) : ?>
+                        pagination: {
+                            el: '.<?php echo esc_js( $slider_id ); ?>-pagination',
+                            clickable: true,
+                        },
+                        <?php endif; ?>
+                        breakpoints: {
+                            640: {
+                                slidesPerView: <?php echo esc_js( $settings['slides_to_show_tablet'] ?? 2 ); ?>,
+                                spaceBetween: spaceBetweenTablet,
+                            },
+                            1024: {
+                                slidesPerView: <?php echo esc_js( $settings['slides_to_show'] ?? 4 ); ?>,
+                                spaceBetween: spaceBetween,
+                            }
+                        }
+                    });
+                };
+                initCattleSlider();
             });
             </script>
             <?php

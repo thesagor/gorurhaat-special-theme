@@ -2,263 +2,416 @@
    Single Product Page - Modern & Professional
    ======================================== */
 
+/* Product Info Fields Display */
+.product-info-fields-display {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.product-fields-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.product-field-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.product-field-item .field-label {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: fit-content;
+  white-space: nowrap;
+}
+
+.product-field-item .field-value {
+  color: #27ae60;
+  font-weight: 600;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.product-field-item .vaccinated-status {
+  color: #27ae60;
+  background: #d5f4e6;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 /* Social Share */
 .product-social-share {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin: 25px 0;
-    padding: 20px 0;
-    border-top: 1px solid #e0e0e0;
-    border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 25px 0;
+
+  padding: 20px 0;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .product-social-share .share-label {
-    font-weight: 600;
-    color: #333;
+  font-weight: 600;
+  color: #333;
 }
 
 .share-buttons {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .share-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    transition: all 0.3s;
-    text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: all 0.3s;
+  text-decoration: none;
 }
 
 .share-btn.facebook {
-    background: #1877f2;
-    color: #fff;
+  background: #1877f2;
+  color: #fff;
 }
 
 .share-btn.facebook:hover {
-    background: #145dbf;
-    transform: translateY(-3px);
+  background: #145dbf;
+  transform: translateY(-3px);
 }
 
 .share-btn.twitter {
-    background: #1da1f2;
-    color: #fff;
+  background: #1da1f2;
+  color: #fff;
 }
 
 .share-btn.twitter:hover {
-    background: #0c85d0;
-    transform: translateY(-3px);
+  background: #0c85d0;
+  transform: translateY(-3px);
 }
 
 .share-btn.whatsapp {
-    background: #25d366;
-    color: #fff;
+  background: #25d366;
+  color: #fff;
 }
 
 .share-btn.whatsapp:hover {
-    background: #1da851;
-    transform: translateY(-3px);
+  background: #1da851;
+  transform: translateY(-3px);
 }
 
 .share-btn.pinterest {
-    background: #e60023;
-    color: #fff;
+  background: #e60023;
+  color: #fff;
 }
 
 .share-btn.pinterest:hover {
-    background: #bd001c;
-    transform: translateY(-3px);
+  background: #bd001c;
+  transform: translateY(-3px);
 }
 
 /* Related Products Section */
 .related-products-section {
-    margin: 60px 0 40px;
-    padding: 40px 0;
-    background: #f8f9fa;
+  margin: 60px 0 40px;
+  padding: 40px 0;
+  background: #f8f9fa;
 }
 
 .related-products-section .section-title {
-    text-align: center;
-    font-size: 32px;
-    font-weight: 700;
-    margin: 0 0 40px;
-    color: #333;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 40px;
+  color: #333;
 }
 
 .related-products-slider {
-    position: relative;
-    padding: 0 50px;
+  position: relative;
+  padding: 0 50px;
 }
 
 .related-product-card {
-    background: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .related-product-card:hover {
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
 }
 
 .related-product-image {
-    position: relative;
-    overflow: hidden;
-    background: #f5f5f5;
-    aspect-ratio: 4 / 3;
+  position: relative;
+  overflow: hidden;
+  background: #f5f5f5;
+  aspect-ratio: 4 / 3;
 }
 
 .related-product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
 }
 
 .related-product-card:hover .related-product-image img {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .related-product-content {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .related-product-title {
-    margin: 0 0 10px;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.4;
-    flex-grow: 1;
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  flex-grow: 1;
 }
 
 .related-product-title a {
-    color: #333;
-    text-decoration: none;
-    transition: color 0.2s;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
 .related-product-title a:hover {
-    color: #3498db;
+  color: #3498db;
 }
 
 .related-product-price {
-    margin: 10px 0 15px;
-    font-size: 20px;
-    font-weight: 700;
-    color: #2c3e50;
+  margin: 10px 0 15px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2c3e50;
 }
 
 .related-product-button {
-    width: 100%;
-    padding: 12px 20px;
-    background: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
+  width: 100%;
+  padding: 12px 20px;
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
 .related-product-button:hover {
-    background: #2980b9;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(52,152,219,0.3);
+  background: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 
 /* Related Slider Navigation */
 .related-products-slider .swiper-button-prev,
 .related-products-slider .swiper-button-next {
-    width: 44px;
-    height: 44px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    transition: all 0.3s;
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
 }
 
 .related-products-slider .swiper-button-prev:after,
 .related-products-slider .swiper-button-next:after {
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
 }
 
 .related-products-slider .swiper-button-prev:hover,
 .related-products-slider .swiper-button-next:hover {
-    background: #3498db;
-    transform: scale(1.1);
+  background: #3498db;
+  transform: scale(1.1);
 }
 
 .related-products-slider .swiper-button-prev:hover:after,
 .related-products-slider .swiper-button-next:hover:after {
-    color: #fff;
+  color: #fff;
 }
 
 .related-products-slider .swiper-pagination {
-    position: relative;
-    margin-top: 30px;
+  position: relative;
+  margin-top: 30px;
 }
 
 .related-products-slider .swiper-pagination-bullet {
-    width: 10px;
-    height: 10px;
-    background: #ccc;
-    opacity: 1;
-    transition: all 0.3s;
+  width: 10px;
+  height: 10px;
+  background: #ccc;
+  opacity: 1;
+  transition: all 0.3s;
 }
 
 .related-products-slider .swiper-pagination-bullet-active {
-    background: #3498db;
-    width: 30px;
-    border-radius: 5px;
+  background: #3498db;
+  width: 30px;
+  border-radius: 5px;
 }
 
-.woocommerce #content div.product div.summary, .woocommerce div.product div.summary, .woocommerce-page div.product div.summary{
-    width: 100%;
+.woocommerce #content div.product div.summary,
+.woocommerce div.product div.summary,
+.woocommerce-page div.product div.summary {
+  width: 100%;
 }
 
- .woocommerce div.product div.images, .woocommerce-page div.product div.images {
-    float: left;
-    width: 100%;
+.woocommerce div.product div.images,
+.woocommerce-page div.product div.images {
+  float: left;
+  width: 100%;
+}
+
+/* ========================================
+   Product Page — Trust Bar
+   ======================================== */
+
+.gorurhaat-product-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  background: #f0faf4;
+  border: 1px solid #c3e6d0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 18px 0;
+}
+.product-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #2c3e50;
+  flex: 1 1 140px;
+}
+.product-trust-item svg {
+  flex-shrink: 0;
+}
+.product-trust-item strong {
+  font-weight: 700;
+  color: #1a4a2e;
+}
+
+/* ========================================
+   Product Page — WhatsApp button upgrade
+   ======================================== */
+
+/* Override the small circle style with a full CTA on product pages */
+.woocommerce div.product .whatsapp-floating-button {
+  margin: 8px 0 16px;
+}
+.woocommerce div.product .whatsapp-button-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  padding: 13px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  gap: 10px;
+  text-decoration: none;
+  background: #25d366;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+  transition: background 0.25s, transform 0.2s, box-shadow 0.2s;
+}
+.woocommerce div.product .whatsapp-button-circle::after {
+  content: "অর্ডার করুন WhatsApp-এ";
+  font-size: 15px;
+}
+.woocommerce div.product .whatsapp-button-circle:hover {
+  background: #1da851;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(37, 211, 102, 0.4);
+}
+.woocommerce div.product .whatsapp-button-circle svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .product-social-share {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .related-products-section .section-title {
-        font-size: 24px;
-        margin-bottom: 30px;
-    }
-    
-    .related-products-slider {
-        padding: 0 40px;
-    }
-    
-    .related-products-slider .swiper-button-prev,
-    .related-products-slider .swiper-button-next {
-        width: 36px;
-        height: 36px;
-    }
-    
-    .related-products-slider .swiper-button-prev:after,
-    .related-products-slider .swiper-button-next:after {
-        font-size: 16px;
-    }
+  /* Product Info Fields */
+  .product-info-fields-display {
+    margin: 15px 0;
+    padding: 15px;
+  }
+
+  .product-fields-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  .product-field-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 10px;
+  }
+
+  .product-field-item .field-label {
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .product-field-item .field-value {
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .product-social-share {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .related-products-section .section-title {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+
+  .related-products-slider {
+    padding: 0 40px;
+  }
+
+  .related-products-slider .swiper-button-prev,
+  .related-products-slider .swiper-button-next {
+    width: 36px;
+    height: 36px;
+  }
+
+  .related-products-slider .swiper-button-prev:after,
+  .related-products-slider .swiper-button-next:after {
+    font-size: 16px;
+  }
 }

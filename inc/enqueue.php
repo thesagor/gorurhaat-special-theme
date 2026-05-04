@@ -77,19 +77,14 @@ add_action( 'wp_enqueue_scripts', 'hello_elementor_child_enqueue_cattle_slider' 
 add_action( 'elementor/frontend/after_enqueue_styles', 'hello_elementor_child_enqueue_cattle_slider' );
 
 /**
- * Enqueue Advanced Slider Widget Styles
- * Only loads when widget is used
+ * Enqueue Advanced Slider Widget Styles - DEPRECATED
+ * This function is no longer needed as hero-slider assets are registered separately
+ * Keeping for backwards compatibility but no longer enqueuing non-existent file
  */
 function hello_elementor_child_enqueue_advanced_slider() {
-    wp_enqueue_style(
-        'advanced-slider',
-        get_stylesheet_directory_uri() . '/css/advanced-slider.css',
-        [ 'swiper' ],
-        HELLO_ELEMENTOR_CHILD_VERSION
-    );
+    // Removed enqueue of non-existent advanced-slider.css
+    // Hero slider styles are handled by hello_elementor_child_register_hero_slider_assets()
 }
-add_action( 'wp_enqueue_scripts', 'hello_elementor_child_enqueue_advanced_slider' );
-add_action( 'elementor/frontend/after_enqueue_styles', 'hello_elementor_child_enqueue_advanced_slider' );
 
 /**
  * Enqueue Hero Slider Widget Assets
@@ -117,6 +112,31 @@ add_action( 'wp_enqueue_scripts', 'hello_elementor_child_register_hero_slider_as
 add_action( 'elementor/frontend/after_register_scripts', 'hello_elementor_child_register_hero_slider_assets' );
 
 /**
+ * Register Blog Card Widget Assets
+ * Only loads when widget is used
+ */
+function hello_elementor_child_register_blog_card_assets() {
+    // Register CSS for blog card widget
+    wp_register_style(
+        'blog-archive-styles',
+        get_stylesheet_directory_uri() . '/css/blog-archive.css',
+        [],
+        HELLO_ELEMENTOR_CHILD_VERSION
+    );
+    
+    // Register JS for blog card widget
+    wp_register_script(
+        'blog-archive-js',
+        get_stylesheet_directory_uri() . '/js/blog-archive.js',
+        [ 'jquery' ],
+        HELLO_ELEMENTOR_CHILD_VERSION,
+        true
+    );
+}
+add_action( 'wp_enqueue_scripts', 'hello_elementor_child_register_blog_card_assets' );
+add_action( 'elementor/frontend/after_register_scripts', 'hello_elementor_child_register_blog_card_assets' );
+
+/**
  * Enqueue custom CSS files
  * Organized in /css folder for better structure
  */
@@ -128,6 +148,23 @@ function hello_elementor_child_enqueue_custom_styles() {
         [],
         HELLO_ELEMENTOR_CHILD_VERSION
     );
+    
+    // Blog Archive Styles (conditional loading for performance)
+    // Only load on archive/home pages, NOT on single posts
+    if ( ( is_archive() || is_home() ) && ! is_single() ) {
+        wp_enqueue_style( 'blog-archive-styles' );
+        wp_enqueue_script( 'blog-archive-js' );
+    }
+
+    // Single Post Styles (conditional loading for performance)
+    if ( is_single() && get_post_type() === 'post' ) {
+        wp_enqueue_style(
+            'single-post-styles',
+            get_stylesheet_directory_uri() . '/css/single-post.css',
+            [],
+            HELLO_ELEMENTOR_CHILD_VERSION
+        );
+    }
     
     // Single product styles (conditional loading for performance)
     if ( is_product() ) {
@@ -217,6 +254,7 @@ function hello_elementor_child_defer_scripts( $tag, $handle, $src ) {
     $defer_scripts = array(
         'swiper',
         'skeleton-screen-js',
+        'hero-slider-script',
     );
     
     if ( in_array( $handle, $defer_scripts ) ) {

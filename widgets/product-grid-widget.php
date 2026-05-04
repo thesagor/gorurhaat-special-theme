@@ -49,7 +49,7 @@ class Hello_Elementor_Product_Grid_Widget extends \Elementor\Widget_Base {
      * @return array Widget categories.
      */
     public function get_categories() {
-        return [ 'woocommerce-elements' ];
+        return [ 'gorurhaat' ];
     }
 
     /**

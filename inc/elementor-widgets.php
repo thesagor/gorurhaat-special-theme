@@ -8,6 +8,7 @@ function hello_elementor_child_register_elementor_widgets( $widgets_manager ) {
     require_once( get_stylesheet_directory() . '/widgets/product-slider-widget.php' );
     require_once( get_stylesheet_directory() . '/widgets/cattle-slider-widget.php' );
     require_once( get_stylesheet_directory() . '/widgets/hero-slider-widget.php' );
+    require_once( get_stylesheet_directory() . '/widgets/blog-card-widget.php' );
 
 
 
@@ -16,6 +17,7 @@ function hello_elementor_child_register_elementor_widgets( $widgets_manager ) {
     $widgets_manager->register( new \Hello_Elementor_Product_Slider_Widget() );
     $widgets_manager->register( new \Hello_Elementor_Cattle_Slider_Widget() );
     $widgets_manager->register( new \Hello_Elementor_Hero_Slider_Widget() );
+    $widgets_manager->register( new \Hello_Elementor_Blog_Card_Widget() );
 
 
 }
@@ -25,6 +27,14 @@ add_action( 'elementor/widgets/register', 'hello_elementor_child_register_elemen
  * Add custom widget categories
  */
 function hello_elementor_child_add_elementor_widget_categories( $elements_manager ) {
+    $elements_manager->add_category(
+        'gorurhaat',
+        [
+            'title' => __( 'Gorurhaat', 'hello-elementor-child' ),
+            'icon' => 'fa fa-cube',
+        ]
+    );
+    
     $elements_manager->add_category(
         'woocommerce-elements',
         [

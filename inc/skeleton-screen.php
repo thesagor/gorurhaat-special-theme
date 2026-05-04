@@ -172,6 +172,40 @@ function render_skeleton_widget( $count = 4 ) {
 }
 
 /**
+ * Hero Slider Skeleton
+ * Loading placeholder for hero slider widget
+ */
+function render_skeleton_hero_slider() {
+    ?>
+    <div class="skeleton-container skeleton-hero-slider" data-skeleton="hero-slider">
+        <div class="skeleton-hero-slider-content">
+            <!-- Left Section -->
+            <div class="skeleton-hero-left">
+                <div class="skeleton-hero-nav-dots">
+                    <?php for ( $i = 0; $i < 5; $i++ ) : ?>
+                        <div class="skeleton skeleton-dot"></div>
+                    <?php endfor; ?>
+                </div>
+                <div class="skeleton-hero-title"></div>
+                <div class="skeleton-hero-description">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="skeleton-hero-button"></div>
+            </div>
+
+            <!-- Right Section -->
+            <div class="skeleton-hero-right">
+                <div class="skeleton-hero-carousel"></div>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
+/**
  * Generic Content Skeleton
  * For custom use cases
  */
@@ -321,6 +355,9 @@ function skeleton_screen_shortcode( $atts ) {
             break;
         case 'slider':
             render_skeleton_slider( intval( $atts['count'] ) );
+            break;
+        case 'hero-slider':
+            render_skeleton_hero_slider();
             break;
         case 'widget':
             render_skeleton_widget( intval( $atts['count'] ) );

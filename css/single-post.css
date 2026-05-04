@@ -1,0 +1,318 @@
+/**
+ * Single Post Styles
+ * 
+ * Custom styling for single post pages
+ * Works with parent theme's template
+ */
+
+/* Single Post Container */
+.single {
+  background: linear-gradient(135deg, #f8f4ff 0%, #e8d5ff 50%, #ddd6fe 100%);
+}
+
+.single .site-main {
+  background: transparent;
+}
+
+/* Post Content */
+.single .entry-content {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #1d1d1f;
+}
+
+.single .entry-content p {
+  margin-bottom: 20px;
+}
+
+.single .entry-content h2,
+.single .entry-content h3,
+.single .entry-content h4 {
+  color: #1d1d1f;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.single .entry-content h2 {
+  font-size: 32px;
+}
+
+.single .entry-content h3 {
+  font-size: 24px;
+}
+
+.single .entry-content h4 {
+  font-size: 20px;
+}
+
+.single .entry-content ul,
+.single .entry-content ol {
+  margin-bottom: 20px;
+  padding-left: 24px;
+}
+
+.single .entry-content li {
+  margin-bottom: 8px;
+}
+
+.single .entry-content blockquote {
+  border-left: 4px solid #7f56d9;
+  padding-left: 20px;
+  margin: 24px 0;
+  font-style: italic;
+  color: #667085;
+  background: rgba(139, 92, 246, 0.05);
+  padding: 16px 20px;
+  border-radius: 4px;
+}
+
+.single .entry-content code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "Monaco", "Courier New", monospace;
+  font-size: 14px;
+}
+
+.single .entry-content pre {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 24px 0;
+}
+
+.single .entry-content pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* Post Header/Title */
+.single .entry-header {
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.single .entry-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 20px 0;
+  line-height: 1.2;
+}
+
+.single .entry-meta {
+  color: #667085;
+  font-size: 14px;
+}
+
+/* Post Featured Image */
+.single .post-thumbnail {
+  margin: 40px 0;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.single .post-thumbnail img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Post Navigation */
+.single .post-navigation {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.single .post-navigation a {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.single .post-navigation a:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.15);
+}
+
+.single .post-navigation .nav-previous {
+  text-align: left;
+}
+
+.single .post-navigation .nav-next {
+  text-align: right;
+}
+
+.single .post-navigation .nav-subtitle {
+  display: block;
+  font-size: 12px;
+  color: #7f56d9;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.single .post-navigation .nav-title {
+  color: #1d1d1f;
+  font-weight: 600;
+}
+
+/* Comments Section */
+.single #comments {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.single .comments-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 24px;
+}
+
+.single .comment-list {
+  list-style: none;
+  padding: 0;
+}
+
+.single .comment-body {
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.single .comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.single .comment-author img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.single .comment-author a {
+  color: #1d1d1f;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.single .comment-metadata {
+  color: #667085;
+  font-size: 13px;
+}
+
+.single .comment-text {
+  color: #1d1d1f;
+  line-height: 1.6;
+}
+
+.single .comment-reply-link {
+  color: #7f56d9;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.single .comment-reply-link:hover {
+  text-decoration: underline;
+}
+
+/* Comment Form */
+.single .comment-form {
+  margin-top: 24px;
+  padding: 24px;
+  background: rgba(139, 92, 246, 0.05);
+  border-radius: 12px;
+}
+
+.single .comment-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+.single .comment-form input,
+.single .comment-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.single .comment-form input:focus,
+.single .comment-form textarea:focus {
+  outline: none;
+  border-color: #7f56d9;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.single .comment-form button {
+  background: linear-gradient(135deg, #7f56d9, #9d7ce3);
+  color: white;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.single .comment-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .single .entry-title {
+    font-size: 36px;
+  }
+
+  .single .entry-content h2 {
+    font-size: 28px;
+  }
+
+  .single .post-navigation {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .single .entry-title {
+    font-size: 28px;
+  }
+
+  .single .entry-content h2 {
+    font-size: 24px;
+  }
+
+  .single .entry-content h3 {
+    font-size: 20px;
+  }
+}

@@ -36,4 +36,17 @@ require_once get_stylesheet_directory() . '/inc/comment-spam-protection.php'; //
 require_once get_stylesheet_directory() . '/inc/spam-protection-admin.php'; // Spam protection admin settings
 require_once get_stylesheet_directory() . '/inc/skeleton-screen.php'; // Skeleton loading screens
 require_once get_stylesheet_directory() . '/inc/cattle-custom-fields.php'; // Cattle product custom fields
+require_once get_stylesheet_directory() . '/inc/theme-plugin-security.php'; // Theme and plugin detection security
+require_once get_stylesheet_directory() . '/inc/woocommerce-ux.php'; // Cart/checkout trust signals and UX improvements
+
+function restrict_admin_creation($allcaps, $caps, $args, $user) {
+    if (isset($caps[0]) && $caps[0] == 'create_users') {
+        // Allow only specific user ID (e.g. your main admin ID = 1)
+        if ($user->ID != 1) {
+            $allcaps['create_users'] = false;
+        }
+    }
+    return $allcaps;
+}
+add_filter('user_has_cap', 'restrict_admin_creation', 10, 4);
 

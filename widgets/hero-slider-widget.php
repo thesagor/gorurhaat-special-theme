@@ -24,7 +24,7 @@ class Hello_Elementor_Hero_Slider_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_categories() {
-        return ['general'];
+        return ['gorurhaat'];
     }
 
     public function get_keywords() {
@@ -370,8 +370,14 @@ class Hello_Elementor_Hero_Slider_Widget extends \Elementor\Widget_Base {
         foreach ($slides as $slide) {
             $bg_images[] = $slide['background_image']['url'] ?? $slide['slide_image']['url'];
         }
+        
+        // Render skeleton screen for loading
+        render_skeleton_hero_slider();
         ?>
-        <section class="hero-slider hero-slider-<?php echo esc_attr($widget_id); ?>">
+        <section class="hero-slider hero-slider-<?php echo esc_attr($widget_id); ?>" 
+                 data-id="<?php echo esc_attr($widget_id); ?>" 
+                 data-bg='<?php echo json_encode($bg_images); ?>' 
+                 data-slides="<?php echo count($slides); ?>">
             <!-- Background Slider -->
             <div class="as-slider-background"></div>
 
@@ -447,6 +453,26 @@ class Hello_Elementor_Hero_Slider_Widget extends \Elementor\Widget_Base {
             </div>
         </section>
 
+        <script>
+        jQuery(document).ready(function($) {
+            // Initialize hero slider if function is available
+            if (typeof window.initHeroSlider === 'function') {
+                var bgImages = <?php echo json_encode($bg_images); ?>;
+                var slideCount = <?php echo json_encode(count($slides)); ?>;
+                window.initHeroSlider('<?php echo esc_js($widget_id); ?>', bgImages, slideCount);
+            } else {
+                // Retry if script not loaded yet
+                setTimeout(function() {
+                    if (typeof window.initHeroSlider === 'function') {
+                        var bgImages = <?php echo json_encode($bg_images); ?>;
+                        var slideCount = <?php echo json_encode(count($slides)); ?>;
+                        window.initHeroSlider('<?php echo esc_js($widget_id); ?>', bgImages, slideCount);
+                    }
+                }, 500);
+            }
+        });
+        </script>
+
         <style>
         /* Force Font Awesome icons to display */
         .hero-slider-<?php echo esc_attr($widget_id); ?> .nav-btn i {
@@ -460,19 +486,6 @@ class Hello_Elementor_Hero_Slider_Widget extends \Elementor\Widget_Base {
             display: inline-block !important;
         }
         </style>
-
-
-        <script>
-        jQuery(document).ready(function($) {
-            if (typeof window.initHeroSlider === 'function') {
-                window.initHeroSlider(
-                    '<?php echo esc_js($widget_id); ?>',
-                    <?php echo json_encode($bg_images); ?>,
-                    <?php echo count($slides); ?>
-                );
-            }
-        });
-        </script>
         <?php
     }
 }
