@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Sagor Ahmed\\\\Desktop\\\\gorurhaat\\\\updated theme\" -Recurse -Force)",
-      "Bash(Select-Object FullName)"
+      "Bash(Select-Object FullName)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Sagor Ahmed\\\\Desktop\\\\gorurhaat\\\\updated theme\" -Recurse)"
     ]
   }
 }

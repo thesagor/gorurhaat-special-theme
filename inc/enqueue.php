@@ -23,6 +23,27 @@ function hello_elementor_child_scripts_styles() {
 add_action( 'wp_enqueue_scripts', 'hello_elementor_child_scripts_styles', 20 );
 
 /**
+ * Enqueue Header & Footer assets (sitewide)
+ */
+function gorurhaat_enqueue_header_footer_assets() {
+	wp_enqueue_style(
+		'gorurhaat-header-footer',
+		get_stylesheet_directory_uri() . '/css/header-footer.css',
+		[ 'font-awesome-6' ],
+		HELLO_ELEMENTOR_CHILD_VERSION
+	);
+
+	wp_enqueue_script(
+		'gorurhaat-header-footer-js',
+		get_stylesheet_directory_uri() . '/js/header-footer.js',
+		[],
+		HELLO_ELEMENTOR_CHILD_VERSION,
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'gorurhaat_enqueue_header_footer_assets', 25 );
+
+/**
  * Enqueue Font Awesome for icons
  */
 function hello_elementor_child_enqueue_fontawesome() {
@@ -173,6 +194,23 @@ function hello_elementor_child_enqueue_custom_styles() {
             get_stylesheet_directory_uri() . '/css/single-product-styles.css',
             [],
             HELLO_ELEMENTOR_CHILD_VERSION
+        );
+    }
+
+    // Shop page styles + JS (loaded only on shop and product category pages)
+    if ( is_shop() || is_product_category() || is_product_tag() ) {
+        wp_enqueue_style(
+            'gorurhaat-shop-page',
+            get_stylesheet_directory_uri() . '/css/shop-page.css',
+            [],
+            HELLO_ELEMENTOR_CHILD_VERSION
+        );
+        wp_enqueue_script(
+            'gorurhaat-shop-filters',
+            get_stylesheet_directory_uri() . '/js/shop-filters.js',
+            [],
+            HELLO_ELEMENTOR_CHILD_VERSION,
+            true
         );
     }
 }

@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'HELLO_ELEMENTOR_CHILD_VERSION', '2.0.0' );
+define( 'HELLO_ELEMENTOR_CHILD_VERSION', '2.1.0' );
 
 /**
  * Include required files
@@ -38,6 +38,25 @@ require_once get_stylesheet_directory() . '/inc/skeleton-screen.php'; // Skeleto
 require_once get_stylesheet_directory() . '/inc/cattle-custom-fields.php'; // Cattle product custom fields
 require_once get_stylesheet_directory() . '/inc/theme-plugin-security.php'; // Theme and plugin detection security
 require_once get_stylesheet_directory() . '/inc/woocommerce-ux.php'; // Cart/checkout trust signals and UX improvements
+require_once get_stylesheet_directory() . '/inc/shop-page.php'; // Shop page filter query hooks and layout settings
+require_once get_stylesheet_directory() . '/inc/nav-walker.php'; // Custom nav menu walker
+
+/**
+ * Register navigation menus and widget areas
+ */
+function gorurhaat_theme_setup() {
+	register_nav_menus( [
+		'gh-primary' => __( 'প্রধান মেনু (Gorurhaat Header)', 'hello-elementor-child' ),
+	] );
+
+	add_theme_support( 'custom-logo', [
+		'height'      => 100,
+		'width'       => 300,
+		'flex-height' => true,
+		'flex-width'  => true,
+	] );
+}
+add_action( 'after_setup_theme', 'gorurhaat_theme_setup' );
 
 function restrict_admin_creation($allcaps, $caps, $args, $user) {
     if (isset($caps[0]) && $caps[0] == 'create_users') {

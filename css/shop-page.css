@@ -1,0 +1,1010 @@
+/* ============================================================
+   Gorurhaat — Shop Page
+   Hero banner + sidebar filter + product grid
+   ============================================================ */
+
+:root {
+  --shop-green:       #2ecc71;
+  --shop-green-dark:  #1a9e52;
+  --shop-primary:     #2c3e50;
+  --shop-accent:      #e67e22;
+  --shop-sidebar-w:   270px;
+  --shop-gap:         28px;
+  --shop-radius:      12px;
+  --shop-border:      #e8ecef;
+  --shop-bg:          #f7f9fc;
+  --shop-text:        #2c3e50;
+  --shop-muted:       #7f8c8d;
+  --shop-active-bg:   #eafaf2;
+  --shop-active-c:    #1a9e52;
+}
+
+/* ============================================================
+   HERO BANNER
+   ============================================================ */
+
+.gorurhaat-shop-hero {
+  position: relative;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(26, 60, 35, 0.88) 0%,
+      rgba(46, 130, 70, 0.80) 50%,
+      rgba(30, 90, 55, 0.90) 100%
+    ),
+    url('../images/shop-hero-bg.jpg') center / cover no-repeat;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Decorative shapes */
+.gorurhaat-shop-hero::before,
+.gorurhaat-shop-hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  background: #fff;
+  pointer-events: none;
+}
+.gorurhaat-shop-hero::before {
+  width: 500px;
+  height: 500px;
+  top: -200px;
+  right: -150px;
+}
+.gorurhaat-shop-hero::after {
+  width: 300px;
+  height: 300px;
+  bottom: -100px;
+  left: -80px;
+}
+
+.shop-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient( 90deg, rgba(0,0,0,.15) 0%, transparent 100% );
+}
+
+.shop-hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 40px;
+  text-align: center;
+  color: #fff;
+}
+
+.shop-hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,.18);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 50px;
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  margin-bottom: 18px;
+}
+
+.shop-hero-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 14px;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+.shop-hero-sub {
+  font-size: 16px;
+  color: rgba(255,255,255,.85);
+  margin: 0 0 28px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* Hero search bar */
+.shop-hero-search {
+  display: flex;
+  max-width: 560px;
+  margin: 0 auto 32px;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,.2);
+  background: #fff;
+}
+.shop-hero-search-input {
+  flex: 1;
+  padding: 16px 22px;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  color: var(--shop-text);
+  outline: none;
+  font-family: inherit;
+}
+.shop-hero-search-input::placeholder { color: #aaa; }
+.shop-hero-search-btn {
+  width: 56px;
+  background: var(--shop-green);
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.shop-hero-search-btn:hover { background: var(--shop-green-dark); }
+
+/* Hero stats */
+.shop-hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 10px 32px;
+  flex-wrap: wrap;
+}
+.shop-stat {
+  text-align: center;
+}
+.shop-stat strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+.shop-stat span {
+  font-size: 12px;
+  color: rgba(255,255,255,.75);
+  letter-spacing: .4px;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   SHOP LAYOUT  (sidebar + main)
+   ============================================================ */
+
+.gorurhaat-shop-wrap {
+  display: grid;
+  grid-template-columns: var(--shop-sidebar-w) 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0 var(--shop-gap);
+  align-items: start;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 36px 24px 60px;
+}
+
+/* Mobile filter toggle — hidden on desktop */
+.shop-filter-toggle { display: none; }
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
+.gorurhaat-shop-sidebar {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  position: sticky;
+  top: 80px;
+}
+
+.sidebar-inner {
+  background: #fff;
+  border: 1px solid var(--shop-border);
+  border-radius: var(--shop-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+}
+
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--shop-border);
+  background: var(--shop-bg);
+}
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--shop-primary);
+  margin: 0;
+}
+.sidebar-close {
+  display: none; /* shown on mobile */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--shop-muted);
+  padding: 4px;
+}
+
+/* ---- Filter section ---- */
+.sf-section {
+  border-bottom: 1px solid var(--shop-border);
+}
+.sf-section:last-child { border-bottom: none; }
+
+.sf-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--shop-primary);
+  text-align: left;
+  transition: background .15s;
+}
+.sf-toggle:hover { background: var(--shop-bg); }
+.sf-chevron {
+  transition: transform .25s;
+  flex-shrink: 0;
+  color: var(--shop-muted);
+}
+.sf-toggle[aria-expanded="false"] .sf-chevron {
+  transform: rotate(-90deg);
+}
+
+.sf-body {
+  padding: 4px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sf-body.is-closed { display: none; }
+
+/* ---- Radio options ---- */
+.sf-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--shop-text);
+  transition: background .15s;
+}
+.sf-radio:hover { background: var(--shop-bg); }
+.sf-radio.is-active {
+  background: var(--shop-active-bg);
+  color: var(--shop-active-c);
+  font-weight: 600;
+}
+.sf-radio input[type="radio"] {
+  accent-color: var(--shop-green);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.sf-radio span { line-height: 1.3; }
+.sf-radio em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--shop-muted);
+  margin-left: 4px;
+}
+.sf-radio-sub { padding-left: 28px; }
+
+.sf-subcats {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 2px;
+  padding-left: 8px;
+  border-left: 2px solid var(--shop-border);
+}
+
+/* ---- Price range ---- */
+.sf-price-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--shop-muted);
+}
+.sf-price-value {
+  font-weight: 700;
+  color: var(--shop-primary);
+  font-size: 14px;
+}
+
+.sf-range-wrap {
+  position: relative;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+.sf-range-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: var(--shop-border);
+  border-radius: 3px;
+  pointer-events: none;
+}
+.sf-range-fill {
+  position: absolute;
+  height: 100%;
+  background: var(--shop-green);
+  border-radius: 3px;
+}
+.sf-range-input {
+  position: absolute;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+  height: 5px;
+}
+.sf-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--shop-green);
+  box-shadow: 0 1px 6px rgba(0,0,0,.15);
+  cursor: pointer;
+  pointer-events: all;
+  transition: transform .15s, box-shadow .15s;
+}
+.sf-range-input::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 10px rgba(46,204,113,.4);
+}
+.sf-range-input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--shop-green);
+  cursor: pointer;
+  pointer-events: all;
+}
+.sf-range-low  { z-index: 3; }
+.sf-range-high { z-index: 4; }
+
+/* ---- In-stock toggle ---- */
+.sf-section-inline { padding: 14px 20px; }
+.sf-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--shop-text);
+  font-weight: 500;
+  user-select: none;
+}
+.sf-switch input { display: none; }
+.sf-switch-track {
+  width: 40px;
+  height: 22px;
+  background: var(--shop-border);
+  border-radius: 11px;
+  flex-shrink: 0;
+  position: relative;
+  transition: background .25s;
+}
+.sf-switch-track::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: transform .25s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+.sf-switch input:checked ~ .sf-switch-track { background: var(--shop-green); }
+.sf-switch input:checked ~ .sf-switch-track::after { transform: translateX(18px); }
+
+/* ---- Sidebar action buttons ---- */
+.sf-actions {
+  display: flex;
+  gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--shop-border);
+  background: var(--shop-bg);
+}
+.sf-apply-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 16px;
+  background: var(--shop-green);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+  font-family: inherit;
+}
+.sf-apply-btn:hover {
+  background: var(--shop-green-dark);
+  transform: translateY(-1px);
+}
+.sf-reset-btn {
+  padding: 11px 14px;
+  background: transparent;
+  color: var(--shop-muted);
+  border: 1px solid var(--shop-border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+.sf-reset-btn:hover {
+  background: #fff5f5;
+  color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+/* ============================================================
+   MAIN PRODUCT AREA
+   ============================================================ */
+
+.gorurhaat-shop-main {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  min-width: 0;
+}
+
+/* ---- Active filter chips ---- */
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.active-filters-label {
+  font-size: 13px;
+  color: var(--shop-muted);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--shop-active-bg);
+  color: var(--shop-active-c);
+  border: 1px solid #a8dfbe;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .15s, border-color .15s;
+}
+.filter-chip:hover {
+  background: #d5f4e6;
+  border-color: var(--shop-green);
+  color: var(--shop-green-dark);
+}
+.filter-chip-clear {
+  background: #fdf2f2;
+  color: #e74c3c;
+  border-color: #f5b7b1;
+}
+.filter-chip-clear:hover {
+  background: #fce4e4;
+  border-color: #e74c3c;
+  color: #c0392b;
+}
+
+/* ---- Sort bar ---- */
+.shop-sort-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1px solid var(--shop-border);
+  border-radius: var(--shop-radius);
+  margin-bottom: 22px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+.shop-result-count {
+  font-size: 14px;
+  color: var(--shop-muted);
+  margin: 0;
+}
+.shop-result-count strong { color: var(--shop-primary); }
+.shop-ordering select {
+  padding: 8px 14px;
+  border: 1px solid var(--shop-border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--shop-primary);
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color .2s;
+  font-family: inherit;
+}
+.shop-ordering select:focus { border-color: var(--shop-green); }
+
+/* ============================================================
+   PRODUCT GRID  (override defaults for this layout)
+   body.woocommerce prefix gives (0,2,1) specificity — beats any
+   ul.products rule with !important in custom-styles.css
+   ============================================================ */
+
+body.woocommerce .gorurhaat-shop-main ul.products,
+body.woocommerce-page .gorurhaat-shop-main ul.products {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 22px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+/* fallback for non-WC body classes */
+.gorurhaat-shop-main ul.products {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 22px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Legacy WooCommerce default card selectors removed — replaced by .gh-product-card above */
+
+/* No products */
+.gorurhaat-shop-main .woocommerce-info {
+  background: #fff;
+  border: 1px solid var(--shop-border);
+  border-radius: var(--shop-radius);
+  padding: 40px 30px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--shop-muted);
+}
+
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+
+.gorurhaat-shop-main .woocommerce-pagination {
+  margin-top: 36px;
+  text-align: center;
+}
+.gorurhaat-shop-main .woocommerce-pagination ul {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.gorurhaat-shop-main .woocommerce-pagination ul li a,
+.gorurhaat-shop-main .woocommerce-pagination ul li span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--shop-border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--shop-primary);
+  text-decoration: none;
+  transition: background .15s, border-color .15s, color .15s;
+  background: #fff;
+}
+.gorurhaat-shop-main .woocommerce-pagination ul li a:hover {
+  background: var(--shop-active-bg);
+  border-color: var(--shop-green);
+  color: var(--shop-green-dark);
+}
+.gorurhaat-shop-main .woocommerce-pagination ul li span.current {
+  background: var(--shop-green);
+  border-color: var(--shop-green);
+  color: #fff;
+}
+
+/* ============================================================
+   MOBILE FILTER TOGGLE BUTTON
+   ============================================================ */
+
+.shop-filter-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  background: var(--shop-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s;
+  font-family: inherit;
+  position: relative;
+}
+.shop-filter-toggle:hover { background: #1a252f; }
+.filter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: var(--shop-green);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* ============================================================
+   SIDEBAR OVERLAY  (mobile)
+   ============================================================ */
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 9997;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.sidebar-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .gorurhaat-shop-wrap {
+    grid-template-columns: 240px 1fr;
+    --shop-sidebar-w: 240px;
+    padding: 28px 20px 48px;
+  }
+  body.woocommerce .gorurhaat-shop-main ul.products,
+  body.woocommerce-page .gorurhaat-shop-main ul.products,
+  .gorurhaat-shop-main ul.products {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 860px) {
+  /* Switch to mobile layout */
+  .gorurhaat-shop-wrap {
+    display: block;
+    padding: 20px 16px 48px;
+  }
+
+  /* Mobile filter toggle visible */
+  .shop-filter-toggle {
+    display: inline-flex;
+    margin-bottom: 18px;
+  }
+
+  /* Sidebar becomes a slide-in drawer */
+  .gorurhaat-shop-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: min(320px, 90vw);
+    height: 100%;
+    z-index: 9998;
+    overflow-y: auto;
+    transition: left .3s ease;
+    background: #fff;
+    box-shadow: 4px 0 20px rgba(0,0,0,.12);
+    border-radius: 0;
+  }
+  .gorurhaat-shop-sidebar.is-open {
+    left: 0;
+  }
+  .sidebar-inner {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    height: 100%;
+    overflow-y: auto;
+  }
+  .sidebar-close {
+    display: flex;
+  }
+
+  /* Full-width product grid */
+  body.woocommerce .gorurhaat-shop-main ul.products,
+  body.woocommerce-page .gorurhaat-shop-main ul.products,
+  .gorurhaat-shop-main ul.products {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px !important;
+  }
+  .gorurhaat-shop-main ul.products li.product .woocommerce-loop-product__link img {
+    height: 180px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .shop-hero-inner { padding: 40px 20px; }
+  .shop-hero-title { font-size: 24px; }
+  .shop-hero-sub   { font-size: 14px; }
+  .shop-hero-stats { gap: 8px 20px; }
+  .shop-stat strong { font-size: 18px; }
+
+  body.woocommerce .gorurhaat-shop-main ul.products,
+  body.woocommerce-page .gorurhaat-shop-main ul.products,
+  .gorurhaat-shop-main ul.products {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .gorurhaat-shop-main ul.products li.product .woocommerce-loop-product__link img {
+    height: 220px !important;
+  }
+  .shop-sort-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+  .shop-ordering select { width: 100%; }
+}
+
+/* ============================================================
+   PRODUCT CARD  (content-product.php custom template)
+   Uses body.woocommerce prefix for high specificity (0,2,X)
+   to override Hello Elementor / WooCommerce default styles.
+   ============================================================ */
+
+/* Card container */
+body.woocommerce ul.products li.product.gh-product-card,
+body.woocommerce-page ul.products li.product.gh-product-card,
+.gorurhaat-shop-main ul.products li.product.gh-product-card {
+  background: #fff !important;
+  border-radius: 14px !important;
+  border: 1px solid #e8ecef !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06) !important;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  float: none !important;
+}
+
+body.woocommerce ul.products li.product.gh-product-card:hover,
+body.woocommerce-page ul.products li.product.gh-product-card:hover,
+.gorurhaat-shop-main ul.products li.product.gh-product-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 14px 32px rgba(0,0,0,.11) !important;
+  border-color: #2ecc71 !important;
+}
+
+/* ── Image wrapper ── */
+.gh-product-card .gh-card-img-link {
+  display: block !important;
+  position: relative !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  background: #f7f9fc !important;
+  line-height: 0 !important;
+  text-decoration: none !important;
+}
+
+/* Force image to fill the card regardless of WooCommerce thumbnail size */
+.gh-product-card .gh-card-img-link img,
+.gh-product-card .gh-card-img-link img.gh-card-img,
+body.woocommerce ul.products li.product.gh-product-card img,
+body.woocommerce-page ul.products li.product.gh-product-card img {
+  width: 100% !important;
+  height: 220px !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  transition: transform .5s ease !important;
+  max-width: none !important;
+}
+
+.gh-product-card:hover .gh-card-img-link img {
+  transform: scale(1.05) !important;
+}
+
+/* ── Badges ── */
+.gh-product-card .onsale {
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+  right: auto !important;
+  bottom: auto !important;
+  background: #e67e22 !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 3px 10px !important;
+  border-radius: 6px !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+.gh-out-of-stock {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  background: rgba(0,0,0,.6) !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 3px 10px !important;
+  border-radius: 6px !important;
+  line-height: 1.5 !important;
+}
+
+/* ── Card body ── */
+.gh-product-card .gh-card-body {
+  padding: 14px 16px 8px !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+}
+
+.gh-product-card .gh-card-title {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.45 !important;
+  margin: 0 0 4px !important;
+  min-height: 40px !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.gh-product-card .gh-card-title a {
+  color: #2c3e50 !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+}
+
+.gh-product-card .gh-card-title a:hover {
+  color: #1a9e52 !important;
+}
+
+.gh-product-card .gh-card-price .price,
+.gh-product-card .gh-card-price .amount {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #1a9e52 !important;
+  display: block !important;
+  line-height: 1.3 !important;
+}
+
+.gh-product-card .gh-card-price .price del,
+.gh-product-card .gh-card-price del .amount {
+  color: #bbb !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  margin-right: 4px !important;
+}
+
+.gh-product-card .gh-card-price .price ins {
+  text-decoration: none !important;
+}
+
+/* ── Actions ── */
+.gh-product-card .gh-card-actions {
+  padding: 0 16px 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin-top: auto !important;
+}
+
+/* WooCommerce outputs an <a> with class="button add_to_cart_button" */
+.gh-product-card .gh-card-actions a.button,
+.gh-product-card .gh-card-actions button.button,
+body.woocommerce ul.products li.product.gh-product-card .gh-card-actions a.button {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  padding: 12px 14px !important;
+  background: #2c3e50 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 9px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: .3px !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  line-height: 1.4 !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+
+.gh-product-card .gh-card-actions a.button:hover,
+.gh-product-card .gh-card-actions button.button:hover {
+  background: #2ecc71 !important;
+  color: #fff !important;
+}
+
+.gh-product-card .gh-view-btn {
+  display: block !important;
+  text-align: center !important;
+  padding: 10px 14px !important;
+  background: transparent !important;
+  color: #7f8c8d !important;
+  border: 1px solid #e8ecef !important;
+  border-radius: 9px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  line-height: 1.4 !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+
+.gh-product-card .gh-view-btn:hover {
+  background: #eafaf2 !important;
+  border-color: #2ecc71 !important;
+  color: #1a9e52 !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .gh-product-card .gh-card-img-link img,
+  .gh-product-card .gh-card-img-link img.gh-card-img,
+  body.woocommerce ul.products li.product.gh-product-card img { height: 180px !important; }
+}
+
+@media (max-width: 560px) {
+  .gh-product-card .gh-card-img-link img,
+  .gh-product-card .gh-card-img-link img.gh-card-img,
+  body.woocommerce ul.products li.product.gh-product-card img { height: 200px !important; }
+}
